@@ -16,6 +16,7 @@ classes:
 - system.galera.server.database.barbican
 - system.keystone.client.single
 - system.keystone.client.service.barbican
+- system.keystone.client.service.cinder3
 - system.keystone.client.service.nova21
 - system.keystone.client.service.nova-placement
 - system.keystone.client.service.designate
@@ -38,7 +39,7 @@ classes:
 - system.designate.server.backend.bind
 parameters:
   _param:
-    openstack_version: ocata
+    openstack_version: pike
     cluster_public_host: ${_param:single_address}
     cluster_public_protocol: http
     openstack_region: RegionOne
