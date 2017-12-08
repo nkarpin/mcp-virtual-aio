@@ -140,9 +140,14 @@ parameters:
           global_default: True
   neutron:
     server:
+      api_workers: 2
+      rpc_state_report_workers: 2
+      rpc_workers: 2
       message_queue:
         members: ~
     gateway:
+      metadata:
+        workers: 2
       agent_mode: dvr_snat
       dvr: True
   nova:
