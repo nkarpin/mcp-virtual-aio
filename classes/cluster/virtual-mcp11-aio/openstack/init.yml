@@ -1,11 +1,15 @@
 classes:
+- system.salt.minion.cert.mysql.server
+- system.salt.minion.cert.rabbitmq_server
 - system.linux.system.lowmem
 - system.linux.system.repo.mcp.openstack
 - system.linux.system.repo.mcp.extra
 - system.linux.storage.loopback
+- service.rabbitmq.server.ssl
 - system.rabbitmq.server.vhost.openstack
 - system.keystone.server.wsgi
 - system.keystone.server.single
+- service.galera.ssl
 - service.galera.master.cluster
 - system.galera.server.database.cinder
 - system.galera.server.database.designate
@@ -139,6 +143,13 @@ parameters:
           crypto_plugin: simple_crypto
           store_plugin: store_crypto
           global_default: True
+      database:
+        ssl:
+          enabled: True
+      message_queue:
+        port: 5671
+        ssl:
+          enabled: True
   neutron:
     server:
       api_workers: 2
@@ -146,11 +157,21 @@ parameters:
       rpc_workers: 2
       message_queue:
         members: ~
+        port: 5671
+        ssl:
+          enabled: True
+      database:
+        ssl:
+          enabled: True
     gateway:
       metadata:
         workers: 2
       agent_mode: dvr_snat
       dvr: True
+      message_queue:
+        port: 5671
+        ssl:
+          enabled: True
   nova:
     compute:
       barbican:
@@ -162,17 +183,42 @@ parameters:
         tenant: service
       cache:
         members: ~
+      message_queue:
+        port: 5671
+        ssl:
+          enabled: True
     controller:
       barbican:
         enabled: ${_param:barbican_integration_enabled}
       vncproxy_url: http://${_param:single_address}:6080
+      database:
+        ssl:
+          enabled: True
+      message_queue:
+        port: 5671
+        ssl:
+          enabled: True
   cinder:
     controller:
       barbican:
         enabled: ${_param:barbican_integration_enabled}
+      database:
+        ssl:
+          enabled: True
+      message_queue:
+        port: 5671
+        ssl:
+          enabled: True
     volume:
       cache:
         members: ~
+      database:
+        ssl:
+          enabled: True
+      message_queue:
+        port: 5671
+        ssl:
+          enabled: True
   horizon:
     server:
       secure: False
@@ -180,9 +226,41 @@ parameters:
     server:
       quota:
         zones: ${_param:designate_quota_zones}
+      database:
+        ssl:
+          enabled: True
+      message_queue:
+        port: 5671
+        ssl:
+          enabled: True
     worker:
       enabled: ${_param:designate_worker_enabled}
   glance:
     server:
       barbican:
         enabled: ${_param:barbican_integration_enabled}
+      database:
+        ssl:
+          enabled: True
+      message_queue:
+        port: 5671
+        ssl:
+          enabled: True
+  keystone:
+    server:
+      database:
+        ssl:
+          enabled: True
+      message_queue:
+        port: 5671
+        ssl:
+          enabled: True
+  heat:
+    server:
+      database:
+        ssl:
+          enabled: True
+      message_queue:
+        port: 5671
+        ssl:
+          enabled: True
