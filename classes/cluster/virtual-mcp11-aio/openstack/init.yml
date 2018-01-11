@@ -128,6 +128,9 @@ parameters:
     openstack_public_neutron_subnet_allocation_end: 192.168.130.254
     barbican_simple_crypto_kek: YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXoxMjM0NTY=
     barbican_integration_enabled: False
+    galera_ssl_enabled: true
+    rabbitmq_ssl_enabled: true
+    rabbitmq_port: 5671 # for non-ssl use 5672
   galera:
     master:
       members: ~
@@ -145,11 +148,11 @@ parameters:
           global_default: True
       database:
         ssl:
-          enabled: True
+          enabled: ${_param:galera_ssl_enabled}
       message_queue:
-        port: 5671
+        port: ${_param:rabbitmq_port}
         ssl:
-          enabled: True
+          enabled: ${_param:rabbitmq_ssl_enabled}
   neutron:
     server:
       api_workers: 2
@@ -157,21 +160,21 @@ parameters:
       rpc_workers: 2
       message_queue:
         members: ~
-        port: 5671
+        port: ${_param:rabbitmq_port}
         ssl:
-          enabled: True
+          enabled: ${_param:rabbitmq_ssl_enabled}
       database:
         ssl:
-          enabled: True
+          enabled: ${_param:galera_ssl_enabled}
     gateway:
       metadata:
         workers: 2
       agent_mode: dvr_snat
       dvr: True
       message_queue:
-        port: 5671
+        port: ${_param:rabbitmq_port}
         ssl:
-          enabled: True
+          enabled: ${_param:rabbitmq_ssl_enabled}
   nova:
     compute:
       barbican:
@@ -184,41 +187,41 @@ parameters:
       cache:
         members: ~
       message_queue:
-        port: 5671
+        port: ${_param:rabbitmq_port}
         ssl:
-          enabled: True
+          enabled: ${_param:rabbitmq_ssl_enabled}
     controller:
       barbican:
         enabled: ${_param:barbican_integration_enabled}
       vncproxy_url: http://${_param:single_address}:6080
       database:
         ssl:
-          enabled: True
+          enabled: ${_param:galera_ssl_enabled}
       message_queue:
-        port: 5671
+        port: ${_param:rabbitmq_port}
         ssl:
-          enabled: True
+          enabled: ${_param:rabbitmq_ssl_enabled}
   cinder:
     controller:
       barbican:
         enabled: ${_param:barbican_integration_enabled}
       database:
         ssl:
-          enabled: True
+          enabled: ${_param:galera_ssl_enabled}
       message_queue:
-        port: 5671
+        port: ${_param:rabbitmq_port}
         ssl:
-          enabled: True
+          enabled: ${_param:rabbitmq_ssl_enabled}
     volume:
       cache:
         members: ~
       database:
         ssl:
-          enabled: True
+          enabled: ${_param:galera_ssl_enabled}
       message_queue:
-        port: 5671
+        port: ${_param:rabbitmq_port}
         ssl:
-          enabled: True
+          enabled: ${_param:rabbitmq_ssl_enabled}
   horizon:
     server:
       secure: False
@@ -228,11 +231,11 @@ parameters:
         zones: ${_param:designate_quota_zones}
       database:
         ssl:
-          enabled: True
+          enabled: ${_param:galera_ssl_enabled}
       message_queue:
-        port: 5671
+        port: ${_param:rabbitmq_port}
         ssl:
-          enabled: True
+          enabled: ${_param:rabbitmq_ssl_enabled}
     worker:
       enabled: ${_param:designate_worker_enabled}
   glance:
@@ -241,26 +244,26 @@ parameters:
         enabled: ${_param:barbican_integration_enabled}
       database:
         ssl:
-          enabled: True
+          enabled: ${_param:galera_ssl_enabled}
       message_queue:
-        port: 5671
+        port: ${_param:rabbitmq_port}
         ssl:
-          enabled: True
+          enabled: ${_param:rabbitmq_ssl_enabled}
   keystone:
     server:
       database:
         ssl:
-          enabled: True
+          enabled: ${_param:galera_ssl_enabled}
       message_queue:
-        port: 5671
+        port: ${_param:rabbitmq_port}
         ssl:
-          enabled: True
+          enabled: ${_param:rabbitmq_ssl_enabled}
   heat:
     server:
       database:
         ssl:
-          enabled: True
+          enabled: ${_param:galera_ssl_enabled}
       message_queue:
-        port: 5671
+        port: ${_param:rabbitmq_port}
         ssl:
-          enabled: True
+          enabled: ${_param:rabbitmq_ssl_enabled}
