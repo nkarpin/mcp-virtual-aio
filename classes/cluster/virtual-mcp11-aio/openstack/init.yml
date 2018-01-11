@@ -38,7 +38,7 @@ classes:
 - system.designate.server.backend.bind
 parameters:
   _param:
-    openstack_version: ocata
+    openstack_version: pike
     cluster_public_host: ${_param:single_address}
     cluster_public_protocol: http
     openstack_region: RegionOne
