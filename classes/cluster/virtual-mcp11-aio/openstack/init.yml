@@ -130,6 +130,8 @@ parameters:
     galera_ssl_enabled: true
     rabbitmq_ssl_enabled: true
     rabbitmq_port: 5671 # for non-ssl use 5672
+    runtest_tempest_cfg_dir: /root/rally_reports/
+    runtest_tempest_cfg_name: tempest_generated.conf
   galera:
     master:
       members: ~
@@ -266,3 +268,9 @@ parameters:
         port: ${_param:rabbitmq_port}
         ssl:
           enabled: ${_param:rabbitmq_ssl_enabled}
+  runtest:
+    enabled: True
+    tempest:
+      enabled: True
+      cfg_dir: ${_param:runtest_tempest_cfg_dir}
+      cfg_name: ${_param:runtest_tempest_cfg_name}
