@@ -131,6 +131,8 @@ parameters:
     galera_ssl_enabled: false # until stable has https://github.com/salt-formulas/salt-formula-galera/commit/d5d0984b80e32bc56a4d0280b232e40e854723ac#diff-5ff514b7d44d308b94bddee0f01932bc
     rabbitmq_ssl_enabled: false # until stable has https://github.com/salt-formulas/salt-formula-cinder/commit/929398265f0a71fbd6fa4e2d7dc81c4720bdde59
     rabbitmq_port: 5672 # for non-ssl use 5672/for ssl 5671
+    runtest_tempest_cfg_dir: /root/rally_reports/
+    runtest_tempest_cfg_name: tempest_generated.conf
   galera:
     master:
       members: ~
@@ -267,3 +269,9 @@ parameters:
         port: ${_param:rabbitmq_port}
         ssl:
           enabled: ${_param:rabbitmq_ssl_enabled}
+  runtest:
+    enabled: True
+    tempest:
+      enabled: True
+      cfg_dir: ${_param:runtest_tempest_cfg_dir}
+      cfg_name: ${_param:runtest_tempest_cfg_name}
