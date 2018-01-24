@@ -20,6 +20,7 @@ classes:
 - system.galera.server.database.barbican
 - system.keystone.client.single
 - system.keystone.client.service.barbican
+- system.keystone.client.service.cinder3
 - system.keystone.client.service.nova21
 - system.keystone.client.service.nova-placement
 - system.keystone.client.service.designate
