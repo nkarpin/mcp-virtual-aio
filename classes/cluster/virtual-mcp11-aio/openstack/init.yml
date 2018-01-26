@@ -275,6 +275,8 @@ parameters:
       enabled: True
       cfg_dir: ${_param:runtest_tempest_cfg_dir}
       cfg_name: ${_param:runtest_tempest_cfg_name}
+      DEFAULT:
+        log_file: /home/rally/rally_reports/tempest.log
       compute:
         build_timeout: 600
         min_microversion: 2.1
