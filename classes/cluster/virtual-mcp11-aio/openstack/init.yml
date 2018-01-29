@@ -128,9 +128,9 @@ parameters:
     openstack_public_neutron_subnet_allocation_end: 192.168.130.254
     barbican_simple_crypto_kek: YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXoxMjM0NTY=
     barbican_integration_enabled: False
-    galera_ssl_enabled: false # until stable has https://github.com/salt-formulas/salt-formula-galera/commit/d5d0984b80e32bc56a4d0280b232e40e854723ac#diff-5ff514b7d44d308b94bddee0f01932bc
-    rabbitmq_ssl_enabled: false # until stable has https://github.com/salt-formulas/salt-formula-cinder/commit/929398265f0a71fbd6fa4e2d7dc81c4720bdde59
-    rabbitmq_port: 5672 # for non-ssl use 5672/for ssl 5671
+    galera_ssl_enabled: true
+    rabbitmq_ssl_enabled: true
+    rabbitmq_port: 5671 # for non-ssl use 5672/for ssl 5671
     runtest_tempest_cfg_dir: /root/rally_reports/
     runtest_tempest_cfg_name: tempest_generated.conf
   galera:
