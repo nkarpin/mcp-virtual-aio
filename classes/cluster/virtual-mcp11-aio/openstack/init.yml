@@ -133,6 +133,8 @@ parameters:
     rabbitmq_port: 5671 # for non-ssl use 5672/for ssl 5671
     runtest_tempest_cfg_dir: /root/rally_reports/
     runtest_tempest_cfg_name: tempest_generated.conf
+    artifactory_user: artifactory_user
+    artifactory_password: artifactory_password
   galera:
     master:
       members: ~
@@ -295,3 +297,18 @@ parameters:
         bug_1573141_fixed: true
       volume-feature-enabled:
         backup: false
+    artifact_collector:
+      enabled: true
+      artifactory:
+       enabled: true
+       user: ${_param:artifactory_user}
+       password: ${_param:artifactory_password}
+       host: artifactory.mcp.mirantis.net
+       port: 443
+       proto: https
+       endpoint: /oscore-local/${_param:cluster_domain}/${_param:infra_config_hostname}
+      artifacts:
+        sys_logs:
+          path: /var/log
+        etc:
+          path: /etc
