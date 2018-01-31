@@ -315,4 +315,4 @@ parameters:
       cmds:
         service_status:
           cmd: 'source /root/keystonercv3; openstack compute service list; openstack volume service list'
-          dst: /tmp/
+          dst: /tmp/openstack_service_report.txt
