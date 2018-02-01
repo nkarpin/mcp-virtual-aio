@@ -129,8 +129,8 @@ parameters:
     barbican_simple_crypto_kek: YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXoxMjM0NTY=
     barbican_integration_enabled: False
     galera_ssl_enabled: true
-    rabbitmq_ssl_enabled: true
-    rabbitmq_port: 5671 # for non-ssl use 5672/for ssl 5671
+    rabbitmq_ssl_enabled: false # untill rabbitmq formula with https://gerrit.mcp.mirantis.net/#/c/15198/ promoted to stable
+    rabbitmq_port: 5672 # for non-ssl use 5672/for ssl 5671
     runtest_tempest_cfg_dir: /root/rally_reports/
     runtest_tempest_cfg_name: tempest_generated.conf
     artifactory_user: artifactory_user
