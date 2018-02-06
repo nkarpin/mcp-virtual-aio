@@ -176,6 +176,10 @@ parameters:
           enabled: false
         nginx_proxy_openstack_api_keystone_private:
           enabled: false
+  rabbitmq:
+    server:
+      ssl:
+        enabled: ${_param:rabbitmq_ssl_enabled}
   galera:
     master:
       members: ~
