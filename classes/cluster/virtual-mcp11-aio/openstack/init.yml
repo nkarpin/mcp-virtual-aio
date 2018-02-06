@@ -7,6 +7,11 @@ classes:
 - system.linux.storage.loopback
 - service.rabbitmq.server.ssl
 - system.rabbitmq.server.vhost.openstack
+- system.nginx.server.single
+- system.nginx.server.proxy.openstack_api
+- system.nginx.server.proxy.openstack.barbican
+- system.nginx.server.proxy.openstack.designate
+- system.nginx.server.proxy.openstack.placement
 - system.keystone.server.wsgi
 - system.keystone.server.single
 - service.galera.ssl
@@ -45,7 +50,16 @@ parameters:
   _param:
     openstack_version: pike
     cluster_public_host: ${_param:single_address}
-    cluster_public_protocol: http
+    cluster_public_protocol: https
+    cluster_internal_protocol: https
+    keystone_service_protocol: ${_param:cluster_internal_protocol}
+    glance_service_protocol: ${_param:cluster_internal_protocol}
+    nova_service_protocol: ${_param:cluster_internal_protocol}
+    neutron_service_protocol: ${_param:cluster_internal_protocol}
+    heat_service_protocol: ${_param:cluster_internal_protocol}
+    cinder_service_protocol: ${_param:cluster_internal_protocol}
+    barbican_service_protocol: ${_param:cluster_internal_protocol}
+    designate_service_protocol: ${_param:cluster_internal_protocol}
     openstack_region: RegionOne
     admin_email: root@localhost
     rabbitmq_openstack_password: workshop
@@ -131,10 +145,37 @@ parameters:
     galera_ssl_enabled: true
     rabbitmq_ssl_enabled: true
     rabbitmq_port: 5671 # for non-ssl use 5672
+    ### nginx ssl sites settings
+    nginx_proxy_ssl:
+      enabled: true
+      engine: salt
+      authority: "${_param:salt_minion_ca_authority}"
+      key_file: "/etc/ssl/private/${_param:cluster_vip_address}.key"
+      cert_file: "/etc/ssl/certs/${_param:cluster_vip_address}.crt"
+      chain_file: "/etc/ssl/certs/${_param:cluster_vip_address}-with-chain.crt"
+    nginx_proxy_openstack_api_address: ${_param:cluster_public_host}
+    nginx_proxy_openstack_keystone_host: 127.0.0.1
+    nginx_proxy_openstack_nova_host: 127.0.0.1
+    nginx_proxy_openstack_cinder_host: 127.0.0.1
+    nginx_proxy_openstack_glance_host: 127.0.0.1
+    nginx_proxy_openstack_neutron_host: 127.0.0.1
+    nginx_proxy_openstack_heat_host: 127.0.0.1
+    nginx_proxy_openstack_designate_host: 127.0.0.1
+    nginx_proxy_openstack_placement_host: 127.0.0.1
+    apache_keystone_api_host: ${_param:single_address}
+    apache_keystone_ssl: ${_param:nginx_proxy_ssl}
     runtest_tempest_cfg_dir: /root/rally_reports/
     runtest_tempest_cfg_name: tempest_generated.conf
     artifactory_user: artifactory_user
     artifactory_password: artifactory_password
+  # Disable keystone nginx sites as we configure SSL for them in Apache
+  nginx:
+    server:
+      site:
+        nginx_proxy_openstack_api_keystone:
+          enabled: false
+        nginx_proxy_openstack_api_keystone_private:
+          enabled: false
   galera:
     master:
       members: ~
@@ -157,11 +198,19 @@ parameters:
         port: ${_param:rabbitmq_port}
         ssl:
           enabled: ${_param:rabbitmq_ssl_enabled}
+      bind:
+        address: 127.0.0.1
+      identity:
+        protocol: https
   neutron:
     server:
       api_workers: 2
       rpc_state_report_workers: 2
       rpc_workers: 2
+      bind:
+        address: 127.0.0.1
+      identity:
+        protocol: https
       message_queue:
         members: ~
         port: ${_param:rabbitmq_port}
@@ -205,6 +254,18 @@ parameters:
         port: ${_param:rabbitmq_port}
         ssl:
           enabled: ${_param:rabbitmq_ssl_enabled}
+      bind:
+         private_address: 127.0.0.1
+      identity:
+         protocol: https
+      network:
+         protocol: https
+      glance:
+         protocol: https
+      metadata:
+         bind:
+           address: ${_param:nova_service_host}
+
   cinder:
     controller:
       barbican:
@@ -216,6 +277,12 @@ parameters:
         port: ${_param:rabbitmq_port}
         ssl:
           enabled: ${_param:rabbitmq_ssl_enabled}
+      identity:
+        protocol: https
+      osapi:
+        host: 127.0.0.1
+      glance:
+        protocol: https
     volume:
       cache:
         members: ~
@@ -229,6 +296,8 @@ parameters:
   horizon:
     server:
       secure: False
+      identity:
+        encryption: ssl
   designate:
     server:
       quota:
@@ -240,6 +309,11 @@ parameters:
         port: ${_param:rabbitmq_port}
         ssl:
           enabled: ${_param:rabbitmq_ssl_enabled}
+      identity:
+        protocol: https
+      bind:
+        api:
+          address: 127.0.0.1
     worker:
       enabled: ${_param:designate_worker_enabled}
   glance:
@@ -253,6 +327,12 @@ parameters:
         port: ${_param:rabbitmq_port}
         ssl:
           enabled: ${_param:rabbitmq_ssl_enabled}
+      bind:
+        address: 127.0.0.1
+      identity:
+        protocol: https
+      registry:
+        protocol: https
   keystone:
     server:
       database:
@@ -271,6 +351,15 @@ parameters:
         port: ${_param:rabbitmq_port}
         ssl:
           enabled: ${_param:rabbitmq_ssl_enabled}
+      bind:
+        api:
+          address: 127.0.0.1
+        api_cfn:
+          address: 127.0.0.1
+        api_cloudwatch:
+          address: 127.0.0.1
+      identity:
+        protocol: https
   runtest:
     enabled: True
     tempest:
