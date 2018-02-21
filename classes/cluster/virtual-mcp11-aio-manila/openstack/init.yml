@@ -1,0 +1,40 @@
+classes:
+- system.linux.storage.loopback_manila
+- system.galera.server.database.manila
+- system.apache.server.site.manila
+- system.keystone.client.service.manila
+- system.keystone.client.service.manila2
+- system.manila.common.single
+- system.manila.share.backend.lvm
+- cluster.virtual-mcp11-aio.openstack
+parameters:
+  _param:
+    keystone_manila_password: workshop
+    manila_service_host: ${_param:single_address}
+    mysql_manila_password: workshop
+    # loop0 is used by cinder lvm
+    manila_lvm_devices:
+      - /dev/loop1
+    loopback_device1_size: 20
+  manila:
+    common:
+      dhss: false
+    api:
+      version: ${_param:openstack_version}
+      enabled: true
+    data:
+      version: ${_param:openstack_version}
+      enabled: true
+    scheduler:
+      version: ${_param:openstack_version}
+      enabled: true
+    share:
+      version: ${_param:openstack_version}
+      enabled: true
+      enabled_share_backends:
+        lvm:
+          name: lvm
+          type: lvm
+          enabled: true
+          dhss: false
+          share_driver: manila.share.drivers.lvm.LVMShareDriver
