@@ -142,6 +142,10 @@ parameters:
       max_connections: 1000
     slave:
       enabled: false
+  rabbitmq:
+    server:
+      ssl:
+        enabled: ${_param:rabbitmq_ssl_enabled}
   barbican:
     server:
       ks_notifications_enable: True
