@@ -45,6 +45,9 @@ parameters:
       permit_root_login: true
   linux:
     system:
+      package:
+        python-cherrypy3:
+          version: latest
       user:
         root:
           enabled: true
