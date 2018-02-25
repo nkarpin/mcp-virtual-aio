@@ -208,6 +208,14 @@ parameters:
         protocol: https
   neutron:
     server:
+      # Temporary install neutron-plugin-ml2 untill https://gerrit.mcp.mirantis.net/#/c/16262/ promoted
+      # to stable
+      pkgs:
+        - neutron-server
+        - python-neutron-lbaas
+        - gettext-base
+        - python-pycadf
+        - neutron-plugin-ml2
       api_workers: 2
       rpc_state_report_workers: 2
       rpc_workers: 2
