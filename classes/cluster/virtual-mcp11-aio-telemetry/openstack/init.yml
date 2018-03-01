@@ -1,6 +1,10 @@
 classes:
 - system.apache.server.site.gnocchi
 - system.apache.server.site.panko
+- system.nginx.server.proxy.openstack.aodh
+- system.nginx.server.proxy.openstack.ceilometer
+- system.nginx.server.proxy.openstack.panko
+- system.nginx.server.proxy.openstack.gnocchi
 - system.galera.server.database.gnocchi
 - system.galera.server.database.aodh
 - system.galera.server.database.panko
@@ -24,6 +28,13 @@ classes:
 - service.ceilometer.agent.single
 parameters:
   _param:
+    nginx_proxy_openstack_api_address: ${_param:cluster_public_host}
+    apache_gnocchi_api_address: 127.0.0.1
+    apache_panko_api_address: 127.0.0.1
+    panko_service_protocol: ${_param:cluster_internal_protocol}
+    aodh_service_protocol: ${_param:cluster_internal_protocol}
+    gnocchi_service_protocol: ${_param:cluster_internal_protocol}
+    ceilometer_service_protocol: ${_param:cluster_internal_protocol}
     panko_version: ${_param:openstack_version}
     ceilometer_version: ${_param:openstack_version}
     aodh_version: ${_param:openstack_version}
@@ -42,7 +53,10 @@ parameters:
     ceilometer_service_host: ${_param:single_address}
     panko_service_host: ${_param:single_address}
     gnocchi_service_host: ${_param:single_address}
-
+    nginx_proxy_openstack_gnocchi_host: 127.0.0.1
+    nginx_proxy_openstack_ceilometer_host: 127.0.0.1
+    nginx_proxy_openstack_aodh_host: 127.0.0.1
+    nginx_proxy_openstack_panko_host: 127.0.0.1
   gnocchi:
     common:
       database:
@@ -53,6 +67,8 @@ parameters:
         protocol: https
   aodh:
     server:
+      bind:
+        host: 127.0.0.1
       identity:
         protocol: https
       database:
@@ -65,6 +81,8 @@ parameters:
   ceilometer:
    server:
      database: ~
+     bind:
+       host: 127.0.0.1
      message_queue:
        port: ${_param:rabbitmq_port}
        ssl:
