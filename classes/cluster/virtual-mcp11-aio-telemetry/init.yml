@@ -1,0 +1,12 @@
+classes:
+- cluster.virtual-mcp11-aio.infra.config
+- cluster.virtual-mcp11-aio-telemetry.openstack
+- cluster.overrides
+parameters:
+  _param:
+    cluster_domain: virtual-mcp11-aio-telemetry.local
+    cluster_name: virtual-mcp11-aio-telemetry
+    reclass_config_master: 192.168.10.90
+    single_address: 172.16.10.90
+    infra_config_address: ${_param:single_address}
+    infra_config_hostname: cfg01
