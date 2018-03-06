@@ -1,0 +1,87 @@
+classes:
+- system.apache.server.site.gnocchi
+- system.apache.server.site.panko
+- system.galera.server.database.gnocchi
+- system.galera.server.database.aodh
+- system.galera.server.database.panko
+- system.keystone.client.service.aodh
+- system.keystone.client.service.panko
+- system.keystone.client.service.ceilometer
+- system.keystone.client.service.gnocchi
+- system.aodh.server.single
+- system.ceilometer.client
+- system.ceilometer.client.cinder_volume
+- system.ceilometer.client.neutron
+- system.ceilometer.client.nova_compute
+- system.gnocchi.common.storage.file
+- system.gnocchi.common.storage.incoming.redis
+- system.gnocchi.server.single
+- system.gnocchi.statsd.single
+- system.gnocchi.common.coordination.redis
+- service.redis.server.single
+- service.panko.server.single
+- service.ceilometer.server.single
+- service.ceilometer.agent.single
+- service.ceilometer.server.publisher.gnocchi
+- service.ceilometer.server.publisher.panko
+parameters:
+  _param:
+    cluster_public_protocol: http
+    panko_version: ${_param:openstack_version}
+    ceilometer_version: ${_param:openstack_version}
+    aodh_version: ${_param:openstack_version}
+    gnocchi_version: 4.0
+    gnocchi_statsd_resource_id: 07f26121-5777-48ba-8a0b-d70468133dd9
+    ceilometer_create_gnocchi_resources: true
+    ceilometer_agent_default_polling_interval: 15
+    ceilometer_agent_default_polling_meters:
+      - "*"
+    ceilometer_secret_key: workshop
+    keystone_aodh_password: workshop
+    keystone_panko_password: workshop
+    keystone_ceilometer_password: workshop
+    keystone_gnocchi_password: workshop
+    mysql_ceilometer_password: workshop
+    mysql_panko_password: workshop
+    mysql_aodh_password: workshop
+    mysql_gnocchi_password: workshop
+    aodh_service_host: ${_param:single_address}
+    ceilometer_service_host: ${_param:single_address}
+    panko_service_host: ${_param:single_address}
+    gnocchi_service_host: ${_param:single_address}
+
+  gnocchi:
+    common:
+      database:
+        ssl:
+          enabled: ${_param:galera_ssl_enabled}
+  aodh:
+    server:
+      database:
+        ssl:
+          enabled: ${_param:galera_ssl_enabled}
+      message_queue:
+        port: ${_param:rabbitmq_port}
+        ssl:
+          enabled: ${_param:rabbitmq_ssl_enabled}
+  ceilometer:
+    server:
+      database: ~
+      message_queue:
+        port: ${_param:rabbitmq_port}
+        ssl:
+          enabled: ${_param:rabbitmq_ssl_enabled}
+      publisher:
+        default:
+          enabled: false
+    agent:
+      polling:
+        sources:
+          default_pollsters:
+            meters: ${_param:ceilometer_agent_default_polling_meters}
+            interval: ${_param:ceilometer_agent_default_polling_interval}
+  panko:
+    server:
+      database:
+        ssl:
+          enabled: ${_param:galera_ssl_enabled}
