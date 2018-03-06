@@ -36,7 +36,6 @@ classes:
 - service.cinder.volume.single
 - system.cinder.volume.backend.lvm
 - system.horizon.server.single
-- system.horizon.server.plugin.theme
 - system.bind.server.single
 - system.barbican.server.single
 - service.barbican.server.plugin.simple_crypto
