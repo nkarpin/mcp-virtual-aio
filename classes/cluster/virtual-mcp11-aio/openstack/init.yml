@@ -285,6 +285,8 @@ parameters:
           enabled: ${_param:rabbitmq_ssl_enabled}
   runtest:
     enabled: True
+    salttest:
+      enabled: True
     tempest:
       enabled: True
       cfg_dir: ${_param:runtest_tempest_cfg_dir}
