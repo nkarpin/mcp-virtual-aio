@@ -52,9 +52,6 @@ parameters:
     galera_server_cluster_name: openstack_cluster
     galera_server_maintenance_password: workshop
     galera_server_admin_password: workshop
-    keystone_public_path: '/'
-    keystone_internal_path: '/'
-    keystone_admin_path: '/'
     keystone_version: ${_param:openstack_version}
     barbican_version: ${_param:openstack_version}
     glance_version: ${_param:openstack_version}
