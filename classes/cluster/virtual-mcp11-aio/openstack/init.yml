@@ -328,5 +328,5 @@ parameters:
           path: /etc
       cmds:
         service_status:
-          cmd: '(. /root/keystonercv3; openstack compute service list; openstack volume service list)'
+          cmd: '(. /root/keystonercv3; openstack compute service list; openstack volume service list; openstack catalog list)'
           dst: /tmp/openstack_service_report.txt
