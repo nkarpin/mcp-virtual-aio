@@ -47,6 +47,7 @@ classes:
 - service.barbican.server.plugin.simple_crypto
 - system.designate.server.single
 - system.designate.server.backend.bind
+- service.runtest.tempest
 parameters:
   _param:
     openstack_version: pike
