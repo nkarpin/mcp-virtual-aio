@@ -15,22 +15,3 @@ parameters:
        - python-cherrypy3
     master:
       worker_threads: 5
-      environment:
-        prd:
-          formula:
-            runtest:
-              source: git
-              address: 'https://gerrit.mcp.mirantis.net/salt-formulas/runtest'
-              revision: master
-              module:
-                runtest: runtest
-              state:
-                runtest.py: runtest.py
-            artifactory:
-              source: git
-              address: 'https://gerrit.mcp.mirantis.net/salt-formulas/artifactory'
-              revision: master
-              module:
-                artifactory.py: artifactory.py
-              state:
-                artifactory.py: artifactory.py
