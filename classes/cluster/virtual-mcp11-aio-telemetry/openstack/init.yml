@@ -55,6 +55,12 @@ parameters:
       database:
         ssl:
           enabled: ${_param:galera_ssl_enabled}
+    server:
+      cache:
+        engine: memcached
+        members:
+        - host: ${_param:single_address}
+          port: 11211
   aodh:
     server:
       database:
