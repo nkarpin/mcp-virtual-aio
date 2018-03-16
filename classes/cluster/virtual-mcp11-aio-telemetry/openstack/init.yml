@@ -65,6 +65,11 @@ parameters:
     server:
       identity:
         protocol: https
+      cache:
+        engine: memcached
+        members:
+        - host: ${_param:single_address}
+          port: 11211
   aodh:
     server:
       bind:
