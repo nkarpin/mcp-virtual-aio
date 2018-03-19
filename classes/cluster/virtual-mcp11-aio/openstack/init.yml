@@ -311,6 +311,8 @@ parameters:
       secure: False
       identity:
         encryption: ssl
+      api_versions:
+        identity: 3
   designate:
     server:
       quota:
