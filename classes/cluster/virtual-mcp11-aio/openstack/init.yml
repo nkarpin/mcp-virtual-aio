@@ -245,7 +245,7 @@ parameters:
     server:
       secure: False
       identity:
-        encryption: ssl
+        encryption: ${_param:horizon_identity_encryption}
       api_versions:
         identity: 3
   designate:
