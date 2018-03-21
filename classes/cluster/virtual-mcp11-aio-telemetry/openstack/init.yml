@@ -59,6 +59,9 @@ parameters:
     nginx_proxy_openstack_panko_host: 127.0.0.1
   gnocchi:
     common:
+      # Remove 'enabled' when https://mirantis.jira.com/browse/PROD-18667
+      # is fixed
+      enabled: true
       database:
         ssl:
           enabled: ${_param:galera_ssl_enabled}
