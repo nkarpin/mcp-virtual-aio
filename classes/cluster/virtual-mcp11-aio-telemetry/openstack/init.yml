@@ -52,6 +52,9 @@ parameters:
 
   gnocchi:
     common:
+      # Remove 'enabled' when https://mirantis.jira.com/browse/PROD-18667
+      # is fixed
+      enabled: true
       database:
         ssl:
           enabled: ${_param:galera_ssl_enabled}
