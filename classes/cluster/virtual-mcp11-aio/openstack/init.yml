@@ -264,7 +264,7 @@ parameters:
       enabled: ${_param:designate_worker_enabled}
   glance:
     client:
-      enabled: False # untill glanceng bug in stable/pike fixed https://mirantis.jira.com/browse/PROD-18661
+      enabled: True
     server:
       barbican:
         enabled: ${_param:barbican_integration_enabled}
