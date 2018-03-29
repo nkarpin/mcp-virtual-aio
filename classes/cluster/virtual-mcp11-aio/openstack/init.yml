@@ -284,6 +284,12 @@ parameters:
         port: ${_param:rabbitmq_port}
         ssl:
           enabled: ${_param:rabbitmq_ssl_enabled}
+    client:
+      enabled: true
+      server:
+        identity:
+          admin:
+            api_version: 3
   heat:
     server:
       database:
