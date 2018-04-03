@@ -137,6 +137,7 @@ parameters:
     rabbitmq_port: 5672 # for non-ssl use 5672/for ssl 5671
     runtest_tempest_cfg_dir: /root/rally_reports/
     runtest_tempest_cfg_name: tempest_generated.conf
+    runtest_tempest_public_net: public
     artifactory_user: artifactory_user
     artifactory_password: artifactory_password
   galera:
@@ -307,6 +308,9 @@ parameters:
       enabled: True
       cfg_dir: ${_param:runtest_tempest_cfg_dir}
       cfg_name: ${_param:runtest_tempest_cfg_name}
+      convert_to_uuid:
+        network:
+          public_network_id: ${_param:runtest_tempest_public_net}
       DEFAULT:
         log_file: /home/rally/rally_reports/tempest.log
       compute:
@@ -327,6 +331,8 @@ parameters:
         bug_1573141_fixed: true
       volume-feature-enabled:
         backup: false
+      network:
+        floating_network_name: ${_param:runtest_tempest_public_net}
     artifact_collector:
       enabled: true
       artifactory:
