@@ -50,6 +50,13 @@ parameters:
     panko_service_host: ${_param:single_address}
     gnocchi_service_host: ${_param:single_address}
 
+  nova:
+    controller:
+      instance_usage_audit: true
+      instance_usage_audit_period: hour
+      notification:
+        notify_on:
+          state_change: vm_and_task_state
   gnocchi:
     common:
       # Remove 'enabled' when https://mirantis.jira.com/browse/PROD-18667
