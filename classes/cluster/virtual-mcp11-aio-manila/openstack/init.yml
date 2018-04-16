@@ -6,6 +6,7 @@ classes:
 - system.keystone.client.service.manila2
 - system.manila.common.single
 - system.manila.share.backend.lvm
+- system.manila.client
 - cluster.virtual-mcp11-aio.openstack
 parameters:
   _param:
@@ -19,6 +20,7 @@ parameters:
   manila:
     common:
       dhss: false
+      default_share_type: default
     api:
       version: ${_param:openstack_version}
       enabled: true
