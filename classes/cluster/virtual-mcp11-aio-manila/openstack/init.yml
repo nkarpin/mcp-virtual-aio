@@ -17,6 +17,12 @@ parameters:
     manila_lvm_devices:
       - /dev/loop1
     loopback_device1_size: 20
+    manila_share_type_default_extra_specs:
+      driver_handles_share_servers: False
+      snapshot_support: True
+      create_share_from_snapshot_support : True
+      mount_snapshot_support : True
+      revert_to_snapshot_support : True
   manila:
     common:
       dhss: false
