@@ -7,11 +7,6 @@ classes:
 - system.linux.storage.loopback
 - service.rabbitmq.server.ssl
 - system.rabbitmq.server.vhost.openstack
-- system.nginx.server.single
-- system.nginx.server.proxy.openstack_api
-- system.nginx.server.proxy.openstack.barbican
-- system.nginx.server.proxy.openstack.designate
-- system.nginx.server.proxy.openstack.placement
 - system.keystone.server.wsgi
 - system.keystone.server.single
 - service.galera.ssl
@@ -22,9 +17,7 @@ classes:
 - system.galera.server.database.heat
 - system.galera.server.database.keystone
 - system.galera.server.database.nova
-- system.galera.server.database.barbican
 - system.keystone.client.single
-- system.keystone.client.service.barbican
 - system.keystone.client.service.cinder3
 - system.keystone.client.service.nova21
 - system.keystone.client.service.nova-placement
@@ -41,35 +34,25 @@ classes:
 - service.cinder.volume.single
 - system.cinder.volume.backend.lvm
 - system.horizon.server.single
-- system.horizon.server.plugin.theme
 - system.bind.server.single
-- system.barbican.server.single
-- service.barbican.server.plugin.simple_crypto
 - system.designate.server.single
 - system.designate.server.backend.bind
 - service.runtest.tempest
 parameters:
   _param:
-    openstack_version: pike
+    openstack_version: queens
     cluster_public_host: ${_param:single_address}
-    cluster_public_protocol: https
-    cluster_internal_protocol: https
-    keystone_service_protocol: ${_param:cluster_internal_protocol}
-    glance_service_protocol: ${_param:cluster_internal_protocol}
-    nova_service_protocol: ${_param:cluster_internal_protocol}
-    neutron_service_protocol: ${_param:cluster_internal_protocol}
-    heat_service_protocol: ${_param:cluster_internal_protocol}
-    cinder_service_protocol: ${_param:cluster_internal_protocol}
-    barbican_service_protocol: ${_param:cluster_internal_protocol}
-    designate_service_protocol: ${_param:cluster_internal_protocol}
+    cluster_public_protocol: http
     openstack_region: RegionOne
     admin_email: root@localhost
     rabbitmq_openstack_password: workshop
     galera_server_cluster_name: openstack_cluster
     galera_server_maintenance_password: workshop
     galera_server_admin_password: workshop
+    keystone_public_path: '/'
+    keystone_internal_path: '/'
+    keystone_admin_path: '/'
     keystone_version: ${_param:openstack_version}
-    barbican_version: ${_param:openstack_version}
     glance_version: ${_param:openstack_version}
     nova_version: ${_param:openstack_version}
     neutron_version: ${_param:openstack_version}
@@ -79,7 +62,6 @@ parameters:
     designate_version: ${_param:openstack_version}
     keystone_service_token: workshop
     keystone_admin_password: workshop
-    keystone_barbican_password: workshop
     keystone_ceilometer_password: workshop
     keystone_cinder_password: workshop
     keystone_glance_password: workshop
@@ -89,14 +71,12 @@ parameters:
     keystone_designate_password: workshop
     keystone_service_host: ${_param:single_address}
     mysql_keystone_password: workshop
-    mysql_barbican_password: workshop
     mysql_glance_password: workshop
     mysql_nova_password: workshop
     mysql_neutron_password: workshop
     mysql_cinder_password: workshop
     mysql_heat_password: workshop
     mysql_designate_password: workshop
-    barbican_service_host: ${_param:single_address}
     heat_service_host: ${_param:single_address}
     neutron_service_host: ${_param:single_address}
     glance_service_host: ${_param:single_address}
@@ -142,46 +122,15 @@ parameters:
     openstack_public_neutron_subnet_cidr: 192.168.130.0/24
     openstack_public_neutron_subnet_allocation_start: 192.168.130.10
     openstack_public_neutron_subnet_allocation_end: 192.168.130.254
-    barbican_simple_crypto_kek: YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXoxMjM0NTY=
-    barbican_integration_enabled: False
     galera_ssl_enabled: true
-    rabbitmq_ssl_enabled: true
-    rabbitmq_port: 5671 # for non-ssl use 5672
-    ### nginx ssl sites settings
-    nginx_proxy_ssl:
-      enabled: true
-      engine: salt
-      authority: "${_param:salt_minion_ca_authority}"
-      key_file: "/etc/ssl/private/${_param:cluster_vip_address}.key"
-      cert_file: "/etc/ssl/certs/${_param:cluster_vip_address}.crt"
-      chain_file: "/etc/ssl/certs/${_param:cluster_vip_address}-with-chain.crt"
-    nginx_proxy_openstack_api_address: ${_param:cluster_public_host}
-    nginx_proxy_openstack_keystone_host: 127.0.0.1
-    nginx_proxy_openstack_nova_host: 127.0.0.1
-    nginx_proxy_openstack_cinder_host: 127.0.0.1
-    nginx_proxy_openstack_glance_host: 127.0.0.1
-    nginx_proxy_openstack_neutron_host: 127.0.0.1
-    nginx_proxy_openstack_heat_host: 127.0.0.1
-    nginx_proxy_openstack_designate_host: 127.0.0.1
-    nginx_proxy_openstack_placement_host: 127.0.0.1
-    apache_keystone_api_host: ${_param:single_address}
-    apache_keystone_ssl: ${_param:nginx_proxy_ssl}
+    rabbitmq_ssl_enabled: false # untill rabbitmq formula with https://gerrit.mcp.mirantis.net/#/c/15198/ promoted to stable
+    rabbitmq_port: 5672 # for non-ssl use 5672/for ssl 5671
     runtest_tempest_cfg_dir: /root/rally_reports/
     runtest_tempest_cfg_name: tempest_generated.conf
+    runtest_tempest_log_file: /home/rally/rally_reports/tempest.log
+    runtest_tempest_public_net: public
     artifactory_user: artifactory_user
     artifactory_password: artifactory_password
-  # Disable keystone nginx sites as we configure SSL for them in Apache
-  nginx:
-    server:
-      site:
-        nginx_proxy_openstack_api_keystone:
-          enabled: false
-        nginx_proxy_openstack_api_keystone_private:
-          enabled: false
-  rabbitmq:
-    server:
-      ssl:
-        enabled: ${_param:rabbitmq_ssl_enabled}
   galera:
     master:
       members: ~
@@ -189,25 +138,10 @@ parameters:
       max_connections: 1000
     slave:
       enabled: false
-  barbican:
+  rabbitmq:
     server:
-      ks_notifications_enable: True
-      store:
-        software:
-          crypto_plugin: simple_crypto
-          store_plugin: store_crypto
-          global_default: True
-      database:
-        ssl:
-          enabled: ${_param:galera_ssl_enabled}
-      message_queue:
-        port: ${_param:rabbitmq_port}
-        ssl:
-          enabled: ${_param:rabbitmq_ssl_enabled}
-      bind:
-        address: 127.0.0.1
-      identity:
-        protocol: https
+      ssl:
+        enabled: ${_param:rabbitmq_ssl_enabled}
   neutron:
     server:
       # Temporary install neutron-plugin-ml2 untill https://gerrit.mcp.mirantis.net/#/c/16262/ promoted
@@ -221,10 +155,6 @@ parameters:
       api_workers: 2
       rpc_state_report_workers: 2
       rpc_workers: 2
-      bind:
-        address: 127.0.0.1
-      identity:
-        protocol: https
       message_queue:
         members: ~
         port: ${_param:rabbitmq_port}
@@ -244,8 +174,6 @@ parameters:
           enabled: ${_param:rabbitmq_ssl_enabled}
   nova:
     compute:
-      barbican:
-        enabled: ${_param:barbican_integration_enabled}
       vncproxy_url: http://${_param:single_address}:6080
       network:
         user: neutron
@@ -258,8 +186,6 @@ parameters:
         ssl:
           enabled: ${_param:rabbitmq_ssl_enabled}
     controller:
-      barbican:
-        enabled: ${_param:barbican_integration_enabled}
       vncproxy_url: http://${_param:single_address}:6080
       database:
         ssl:
@@ -268,22 +194,8 @@ parameters:
         port: ${_param:rabbitmq_port}
         ssl:
           enabled: ${_param:rabbitmq_ssl_enabled}
-      bind:
-         private_address: 127.0.0.1
-      identity:
-         protocol: https
-      network:
-         protocol: https
-      glance:
-         protocol: https
-      metadata:
-         bind:
-           address: ${_param:nova_service_host}
-
   cinder:
     controller:
-      barbican:
-        enabled: ${_param:barbican_integration_enabled}
       database:
         ssl:
           enabled: ${_param:galera_ssl_enabled}
@@ -291,12 +203,6 @@ parameters:
         port: ${_param:rabbitmq_port}
         ssl:
           enabled: ${_param:rabbitmq_ssl_enabled}
-      identity:
-        protocol: https
-      osapi:
-        host: 127.0.0.1
-      glance:
-        protocol: https
     volume:
       cache:
         members: ~
@@ -311,7 +217,7 @@ parameters:
     server:
       secure: False
       identity:
-        encryption: ssl
+        encryption: ${_param:horizon_identity_encryption}
       api_versions:
         identity: 3
   designate:
@@ -325,17 +231,12 @@ parameters:
         port: ${_param:rabbitmq_port}
         ssl:
           enabled: ${_param:rabbitmq_ssl_enabled}
-      identity:
-        protocol: https
-      bind:
-        api:
-          address: 127.0.0.1
     worker:
       enabled: ${_param:designate_worker_enabled}
   glance:
+    client:
+      enabled: True
     server:
-      barbican:
-        enabled: ${_param:barbican_integration_enabled}
       database:
         ssl:
           enabled: ${_param:galera_ssl_enabled}
@@ -343,12 +244,6 @@ parameters:
         port: ${_param:rabbitmq_port}
         ssl:
           enabled: ${_param:rabbitmq_ssl_enabled}
-      bind:
-        address: 127.0.0.1
-      identity:
-        protocol: https
-      registry:
-        protocol: https
   keystone:
     server:
       database:
@@ -358,6 +253,12 @@ parameters:
         port: ${_param:rabbitmq_port}
         ssl:
           enabled: ${_param:rabbitmq_ssl_enabled}
+    client:
+      enabled: true
+      server:
+        identity:
+          admin:
+            api_version: 3
   heat:
     server:
       database:
@@ -367,27 +268,21 @@ parameters:
         port: ${_param:rabbitmq_port}
         ssl:
           enabled: ${_param:rabbitmq_ssl_enabled}
-      bind:
-        api:
-          address: 127.0.0.1
-        api_cfn:
-          address: 127.0.0.1
-        api_cloudwatch:
-          address: 127.0.0.1
-      identity:
-        protocol: https
   runtest:
     enabled: True
+    salttest:
+      enabled: True
     tempest:
       enabled: True
       cfg_dir: ${_param:runtest_tempest_cfg_dir}
       cfg_name: ${_param:runtest_tempest_cfg_name}
-      DEFAULT:
-        log_file: /home/rally/rally_reports/tempest.log
+      convert_to_uuid:
+        network:
+          public_network_id: ${_param:runtest_tempest_public_net}
       compute:
         build_timeout: 600
         min_microversion: 2.1
-        max_microversion: 2.42
+        max_microversion: 2.53
       orchestration:
         max_template_size: 5440000
         max_resources_per_stack: 20000
@@ -402,6 +297,8 @@ parameters:
         bug_1573141_fixed: true
       volume-feature-enabled:
         backup: false
+      network:
+        floating_network_name: ${_param:runtest_tempest_public_net}
     artifact_collector:
       enabled: true
       artifactory:
@@ -419,5 +316,5 @@ parameters:
           path: /etc
       cmds:
         service_status:
-          cmd: '(. /root/keystonercv3; openstack compute service list; openstack volume service list)'
+          cmd: '(. /root/keystonercv3; openstack compute service list; openstack volume service list; openstack catalog list)'
           dst: /tmp/openstack_service_report.txt

@@ -1,10 +1,6 @@
 classes:
 - system.apache.server.site.gnocchi
 - system.apache.server.site.panko
-- system.nginx.server.proxy.openstack.aodh
-- system.nginx.server.proxy.openstack.ceilometer
-- system.nginx.server.proxy.openstack.panko
-- system.nginx.server.proxy.openstack.gnocchi
 - system.galera.server.database.gnocchi
 - system.galera.server.database.aodh
 - system.galera.server.database.panko
@@ -26,20 +22,20 @@ classes:
 - service.panko.server.single
 - service.ceilometer.server.single
 - service.ceilometer.agent.single
+- service.ceilometer.server.publisher.gnocchi
+- service.ceilometer.server.publisher.panko
 parameters:
   _param:
-    nginx_proxy_openstack_api_address: ${_param:cluster_public_host}
-    apache_gnocchi_api_address: 127.0.0.1
-    apache_panko_api_address: 127.0.0.1
-    panko_service_protocol: ${_param:cluster_internal_protocol}
-    aodh_service_protocol: ${_param:cluster_internal_protocol}
-    gnocchi_service_protocol: ${_param:cluster_internal_protocol}
-    ceilometer_service_protocol: ${_param:cluster_internal_protocol}
+    cluster_public_protocol: http
     panko_version: ${_param:openstack_version}
     ceilometer_version: ${_param:openstack_version}
     aodh_version: ${_param:openstack_version}
     gnocchi_version: 4.0
     gnocchi_statsd_resource_id: 07f26121-5777-48ba-8a0b-d70468133dd9
+    ceilometer_create_gnocchi_resources: true
+    ceilometer_agent_default_polling_interval: 15
+    ceilometer_agent_default_polling_meters:
+      - "*"
     ceilometer_secret_key: workshop
     keystone_aodh_password: workshop
     keystone_panko_password: workshop
@@ -53,10 +49,14 @@ parameters:
     ceilometer_service_host: ${_param:single_address}
     panko_service_host: ${_param:single_address}
     gnocchi_service_host: ${_param:single_address}
-    nginx_proxy_openstack_gnocchi_host: 127.0.0.1
-    nginx_proxy_openstack_ceilometer_host: 127.0.0.1
-    nginx_proxy_openstack_aodh_host: 127.0.0.1
-    nginx_proxy_openstack_panko_host: 127.0.0.1
+
+  nova:
+    controller:
+      instance_usage_audit: true
+      instance_usage_audit_period: hour
+      notification:
+        notify_on:
+          state_change: vm_and_task_state
   gnocchi:
     common:
       # Remove 'enabled' when https://mirantis.jira.com/browse/PROD-18667
@@ -66,8 +66,6 @@ parameters:
         ssl:
           enabled: ${_param:galera_ssl_enabled}
     server:
-      identity:
-        protocol: https
       cache:
         engine: memcached
         members:
@@ -75,10 +73,6 @@ parameters:
           port: 11211
   aodh:
     server:
-      bind:
-        host: 127.0.0.1
-      identity:
-        protocol: https
       database:
         ssl:
           enabled: ${_param:galera_ssl_enabled}
@@ -87,20 +81,23 @@ parameters:
         ssl:
           enabled: ${_param:rabbitmq_ssl_enabled}
   ceilometer:
-   server:
-     database: ~
-     bind:
-       host: 127.0.0.1
-     message_queue:
-       port: ${_param:rabbitmq_port}
-       ssl:
-         enabled: ${_param:rabbitmq_ssl_enabled}
-     identity:
-       protocol: https
+    server:
+      database: ~
+      message_queue:
+        port: ${_param:rabbitmq_port}
+        ssl:
+          enabled: ${_param:rabbitmq_ssl_enabled}
+      publisher:
+        default:
+          enabled: false
+    agent:
+      polling:
+        sources:
+          default_pollsters:
+            meters: ${_param:ceilometer_agent_default_polling_meters}
+            interval: ${_param:ceilometer_agent_default_polling_interval}
   panko:
     server:
-      identity:
-        protocol: https
       database:
         ssl:
           enabled: ${_param:galera_ssl_enabled}

@@ -1,0 +1,97 @@
+classes:
+- system.apache.server.site.cinder
+# Enable proxy for services that are not under apache and
+# do not use apache wsgi template
+- system.apache.server.proxy.openstack.designate
+- system.apache.server.proxy.openstack.glance
+- system.apache.server.proxy.openstack.heat
+- system.apache.server.proxy.openstack.neutron
+- system.apache.server.proxy.openstack.nova
+- system.apache.server.proxy.openstack.placement
+- cluster.virtual-mcp11-aio.openstack
+parameters:
+  _param:
+    cluster_public_protocol: https
+    cluster_internal_protocol: https
+    keystone_service_protocol: ${_param:cluster_internal_protocol}
+    glance_service_protocol: ${_param:cluster_internal_protocol}
+    nova_service_protocol: ${_param:cluster_internal_protocol}
+    neutron_service_protocol: ${_param:cluster_internal_protocol}
+    heat_service_protocol: ${_param:cluster_internal_protocol}
+    cinder_service_protocol: ${_param:cluster_internal_protocol}
+    designate_service_protocol: ${_param:cluster_internal_protocol}
+    apache_proxy_ssl:
+      enabled: true
+      engine: salt
+      authority: "${_param:salt_minion_ca_authority}"
+      key_file: "/etc/ssl/private/internal_proxy.key"
+      cert_file: "/etc/ssl/certs/internal_proxy.crt"
+      chain_file: "/etc/ssl/certs/internal_proxy-with-chain.crt"
+    apache_cinder_ssl: ${_param:apache_proxy_ssl}
+    apache_keystone_ssl: ${_param:apache_proxy_ssl}
+    apache_proxy_openstack_api_address: ${_param:cluster_public_host}
+    apache_proxy_openstack_keystone_host: 127.0.0.1
+    apache_proxy_openstack_nova_host: 127.0.0.1
+    apache_proxy_openstack_glance_host: 127.0.0.1
+    apache_proxy_openstack_neutron_host: 127.0.0.1
+    apache_proxy_openstack_heat_host: 127.0.0.1
+    apache_proxy_openstack_designate_host: 127.0.0.1
+    apache_proxy_openstack_placement_host: 127.0.0.1
+    apache_keystone_api_host: ${_param:single_address}
+  neutron:
+    server:
+      bind:
+        address: 127.0.0.1
+      identity:
+        protocol: https
+  nova:
+    controller:
+      bind:
+         private_address: 127.0.0.1
+      identity:
+         protocol: https
+      network:
+         protocol: https
+      glance:
+         protocol: https
+      metadata:
+         bind:
+           address: ${_param:nova_service_host}
+
+  cinder:
+    controller:
+      identity:
+        protocol: https
+      glance:
+        protocol: https
+  horizon:
+    server:
+      secure: False
+      identity:
+        encryption: ssl
+  designate:
+    server:
+      identity:
+        protocol: https
+      bind:
+        api:
+          address: 127.0.0.1
+  glance:
+    server:
+      bind:
+        address: 127.0.0.1
+      identity:
+        protocol: https
+      registry:
+        protocol: https
+  heat:
+    server:
+      bind:
+        api:
+          address: 127.0.0.1
+        api_cfn:
+          address: 127.0.0.1
+        api_cloudwatch:
+          address: 127.0.0.1
+      identity:
+        protocol: https

@@ -1,0 +1,40 @@
+classes:
+- system.galera.server.database.barbican
+- system.keystone.client.service.barbican
+- system.barbican.server.single
+- service.barbican.server.plugin.simple_crypto
+- cluster.virtual-mcp11-aio.openstack
+parameters:
+  _param:
+    keystone_barbican_password: workshop
+    barbican_service_host: ${_param:single_address}
+    mysql_barbican_password: workshop
+    barbican_simple_crypto_kek: YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXoxMjM0NTY=
+    barbican_integration_enabled: true
+  barbican:
+    server:
+      enabled: true
+      dogtag_admin_cert:
+        engine: mine
+        minion: ${linux:network:fqdn}
+      ks_notifications_enable: True
+      store:
+        software:
+          crypto_plugin: simple_crypto
+          store_plugin: store_crypto
+          global_default: True
+  nova:
+    compute:
+      barbican:
+        enabled: ${_param:barbican_integration_enabled}
+    controller:
+      barbican:
+        enabled: ${_param:barbican_integration_enabled}
+  cinder:
+    controller:
+      barbican:
+        enabled: ${_param:barbican_integration_enabled}
+  glance:
+    server:
+      barbican:
+        enabled: ${_param:barbican_integration_enabled}
