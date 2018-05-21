@@ -8,6 +8,7 @@ parameters:
   _param:
     keystone_barbican_password: workshop
     barbican_service_host: ${_param:single_address}
+    barbican_version: ${_param:openstack_version}
     mysql_barbican_password: workshop
     barbican_simple_crypto_kek: YWJjZGVmZ2hpamtsbW5vcHFyc3R1dnd4eXoxMjM0NTY=
     barbican_integration_enabled: true
