@@ -255,6 +255,9 @@ parameters:
           enabled: ${_param:rabbitmq_ssl_enabled}
     client:
       enabled: true
+      resources:
+        v3:
+          enabled: true
       server:
         identity:
           admin:
