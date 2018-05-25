@@ -262,6 +262,11 @@ parameters:
         identity:
           admin:
             api_version: 3
+        admin_identity:
+          admin:
+            api_version: ''
+            user_domain_name: 'Default'
+            project_domain_name: 'Default'
   heat:
     server:
       database:
@@ -271,6 +276,12 @@ parameters:
         port: ${_param:rabbitmq_port}
         ssl:
           enabled: ${_param:rabbitmq_ssl_enabled}
+  # Until dependency with minimal version to python-tenacity is added.
+  linux:
+    system:
+      package:
+        python-tornado:
+          version: latest
   runtest:
     enabled: True
     salttest:

@@ -15,3 +15,11 @@ parameters:
        - python-cherrypy3
     master:
       worker_threads: 5
+      environment:
+        prd:
+          formula:
+            # Until patch to reclass-system is merged https://gerrit.mcp.mirantis.net/#/c/20665/
+            # and reclass bumped.
+            oslo_templates:
+              source: pkg
+              name: salt-formula-oslo-templates
