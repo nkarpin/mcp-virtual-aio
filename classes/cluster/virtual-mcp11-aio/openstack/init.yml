@@ -34,6 +34,7 @@ classes:
 - service.cinder.volume.single
 - system.cinder.volume.backend.lvm
 - system.horizon.server.single
+- system.horizon.server.plugin.heat
 - system.bind.server.single
 - system.designate.server.single
 - system.designate.server.backend.bind
