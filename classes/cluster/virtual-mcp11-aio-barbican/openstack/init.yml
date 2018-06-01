@@ -2,6 +2,7 @@ classes:
 - system.galera.server.database.barbican
 - system.keystone.client.service.barbican
 - system.barbican.server.single
+- system.apache.server.site.barbican
 - service.barbican.server.plugin.simple_crypto
 - cluster.virtual-mcp11-aio.openstack
 parameters:
