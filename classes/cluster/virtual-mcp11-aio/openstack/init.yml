@@ -2,7 +2,7 @@ classes:
 - system.salt.minion.cert.mysql.server
 - system.salt.minion.cert.rabbitmq_server
 - system.linux.system.lowmem
-- system.linux.system.repo.mcp.openstack
+- system.linux.system.repo.mcp.mirror.v1.openstack
 - system.linux.system.repo.mcp.extra
 - system.linux.storage.loopback
 - service.rabbitmq.server.ssl
@@ -116,9 +116,6 @@ parameters:
       rndc_key_file: /etc/designate/rndc.key
     designate_quota_zones: 40
     designate_worker_enabled: true
-    linux_system_repo: deb [arch=amd64] http://mirror.fuel-infra.org/mcp-repos/${_param:openstack_version}/xenial ${_param:openstack_version} main
-    linux_system_repo_pin: release a=${_param:openstack_version}
-    linux_system_repo_priority: 1200
     openstack_public_neutron_subnet_gateway:  192.168.130.1
     openstack_public_neutron_subnet_cidr: 192.168.130.0/24
     openstack_public_neutron_subnet_allocation_start: 192.168.130.10

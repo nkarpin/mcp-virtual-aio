@@ -12,8 +12,8 @@ classes:
 - system.mysql.client
 - system.memcached.server.single
 - system.rabbitmq.server.single
-- cluster.virtual-mcp11-aio.infra
 - cluster.virtual-mcp11-aio.openstack
+- cluster.virtual-mcp11-aio.infra
 - cluster.overrides
 parameters:
   _param:
@@ -49,15 +49,6 @@ parameters:
           enabled: true
           # r00tme
           password: $6$9ojWyyN.$26Vj46JtCUL6C7XBQ8RmQTZLwo8/8SkqTRElXh0X2YBLrt7E/aVe2AYQ5gguYUwUknZNOSn5q7M9M3Jyf2gof/
-      repo:
-        linux_system_repo:
-          source: ${_param:linux_system_repo}
-          architectures: amd64
-          clean_file: true
-          pin:
-          - pin: ${_param:linux_system_repo_pin}
-            priority: ${_param:linux_system_repo_priority}
-            package: '*'
     network:
       bridge: openvswitch
       interface:
