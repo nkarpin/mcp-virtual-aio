@@ -1,5 +1,4 @@
 classes:
 - cluster.virtual-mcp11-aio
-- cluster.virtual-mcp11-aio-ironic.infra
 - cluster.virtual-mcp11-aio-ironic.openstack
 - cluster.overrides

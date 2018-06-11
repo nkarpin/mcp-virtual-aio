@@ -3,6 +3,8 @@ classes:
 parameters:
   _param:
     linux_system_codename: xenial
+    apt_mk_version: testing
+    linux_system_purge_repos: false
   linux:
     system:
       name: cfg01
@@ -23,3 +25,6 @@ parameters:
             oslo_templates:
               source: pkg
               name: salt-formula-oslo-templates
+    minion:
+      trusted_ca_minions:
+        -  cfg01.${_param:cluster_domain}

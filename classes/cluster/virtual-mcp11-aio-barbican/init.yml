@@ -1,5 +1,4 @@
 classes:
-- cluster.virtual-mcp11-aio-barbican.infra
 - cluster.virtual-mcp11-aio-barbican.openstack
 - cluster.virtual-mcp11-aio
 - cluster.overrides
