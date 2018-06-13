@@ -1,5 +1,4 @@
 classes:
-- cluster.virtual-mcp11-aio-ssl.infra
 - cluster.virtual-mcp11-aio-ssl.openstack
 - cluster.virtual-mcp11-aio
 - cluster.overrides

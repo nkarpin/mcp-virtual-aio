@@ -13,7 +13,6 @@ classes:
 - system.memcached.server.single
 - system.rabbitmq.server.single
 - cluster.virtual-mcp11-aio.openstack
-- cluster.virtual-mcp11-aio.infra
 - cluster.overrides
 parameters:
   _param:

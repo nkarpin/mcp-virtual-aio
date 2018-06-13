@@ -1,5 +1,4 @@
 classes:
-- cluster.virtual-mcp11-aio-manila.infra
 - cluster.virtual-mcp11-aio-manila.openstack
 - cluster.virtual-mcp11-aio
 - cluster.overrides
