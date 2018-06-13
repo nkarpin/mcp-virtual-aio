@@ -22,8 +22,7 @@ classes:
 - service.panko.server.single
 - service.ceilometer.server.single
 - service.ceilometer.agent.single
-- service.ceilometer.server.publisher.gnocchi
-- service.ceilometer.server.publisher.panko
+- system.ceilometer.server.backend.default
 parameters:
   _param:
     cluster_public_protocol: http
@@ -49,6 +48,8 @@ parameters:
     ceilometer_service_host: ${_param:single_address}
     panko_service_host: ${_param:single_address}
     gnocchi_service_host: ${_param:single_address}
+    # ceilometer database host is hardcoded on service level
+    ceilometer_database_host: ${_param:single_address}
 
   nova:
     controller:
@@ -82,14 +83,10 @@ parameters:
           enabled: ${_param:rabbitmq_ssl_enabled}
   ceilometer:
     server:
-      database: ~
       message_queue:
         port: ${_param:rabbitmq_port}
         ssl:
           enabled: ${_param:rabbitmq_ssl_enabled}
-      publisher:
-        default:
-          enabled: false
     agent:
       polling:
         sources:
