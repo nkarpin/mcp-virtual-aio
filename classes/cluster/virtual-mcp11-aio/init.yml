@@ -4,6 +4,7 @@ classes:
 - system.linux.system.single.debian
 - system.linux.system.repo.mcp.salt
 - system.openssh.client.lab
+- system.openssh.server.team.lab
 - system.salt.master.api
 - system.salt.master.pkg
 - system.salt.minion.ca.salt_master
