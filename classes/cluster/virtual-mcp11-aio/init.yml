@@ -14,6 +14,7 @@ classes:
 - system.memcached.server.single
 - system.rabbitmq.server.single
 - cluster.virtual-mcp11-aio.openstack
+- system.auditd.server.ciscat
 - cluster.overrides
 parameters:
   _param:
