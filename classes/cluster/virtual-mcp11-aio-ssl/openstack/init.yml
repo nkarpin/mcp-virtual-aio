@@ -95,3 +95,8 @@ parameters:
           address: 127.0.0.1
       identity:
         protocol: https
+      # Since we using self signed cert not present in images, we have to
+      # use insecure option when sending signal to wait condition from instance.
+      clients:
+        heat:
+          insecure: true
