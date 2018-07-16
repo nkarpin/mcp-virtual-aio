@@ -85,11 +85,13 @@ parameters:
           enabled: ${_param:rabbitmq_ssl_enabled}
   ceilometer:
     server:
+      region: ${_param:openstack_region}
       message_queue:
         port: ${_param:rabbitmq_port}
         ssl:
           enabled: ${_param:rabbitmq_ssl_enabled}
     agent:
+      region: ${_param:openstack_region}
       polling:
         sources:
           default_pollsters:
@@ -100,3 +102,5 @@ parameters:
       database:
         ssl:
           enabled: ${_param:galera_ssl_enabled}
+      identity:
+        region: ${_param:openstack_region}
