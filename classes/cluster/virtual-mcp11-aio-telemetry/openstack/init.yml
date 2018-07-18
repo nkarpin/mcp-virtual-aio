@@ -85,6 +85,7 @@ parameters:
           enabled: ${_param:rabbitmq_ssl_enabled}
   ceilometer:
     server:
+      role: ${_param:openstack_node_role}
       region: ${_param:openstack_region}
       message_queue:
         port: ${_param:rabbitmq_port}
@@ -99,6 +100,7 @@ parameters:
             interval: ${_param:ceilometer_agent_default_polling_interval}
   panko:
     server:
+      role: ${_param:openstack_node_role}
       database:
         ssl:
           enabled: ${_param:galera_ssl_enabled}
