@@ -188,6 +188,12 @@ parameters:
         port: ${_param:rabbitmq_port}
         ssl:
           enabled: ${_param:rabbitmq_ssl_enabled}
+      # Since in AIO by default option config_drive is false,
+      # due to nova controller and compute states rewrite
+      # configs each, we must set config_drive option
+      # explicitly for runtest formula to discover the correct settings
+      config_drive:
+        forced: false
     controller:
       vncproxy_url: http://${_param:single_address}:6080
       database:
