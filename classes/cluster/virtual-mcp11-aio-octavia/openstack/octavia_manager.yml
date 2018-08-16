@@ -1,0 +1,39 @@
+classes:
+- system.octavia.manager.single
+- system.salt.minion.ca.octavia_ca
+- system.salt.minion.cert.octavia.amphora_client
+parameters:
+  _param:
+    octavia_private_key: |
+      -----BEGIN RSA PRIVATE KEY-----
+      MIIEpAIBAAKCAQEA5zeEikUm/9JWF1H42evlX7MaBldMseZQd9BK27FTnW0oocPS
+      hCAdeo5+hIZmHpiHdgwTLk2NynF02xNimh9FEk1WIMbUD788eYBuBvIrcm2KRjZ5
+      0yRHT4QHJgCIM14u2lJjF6aKc4lMhKDZIvOgKy/Lr96/CDg/o9+8izT1n1duwg93
+      o6VZtu8U4m99U/IDTejkB0nleBtVvBcOcLHL5cnG7KoRg82j8cl1eK1aDm7RfRRv
+      O1ASH7NpNReDOWopETJx9RYoYxjGU6M8MXPvYEGmnGLD64JVAJARooM2cYLIhmTf
+      sVS8Ib4wARwuehPLn0CEdNiQbS0dXCnc+4snwQIDAQABAoIBABJNrsxTVRcDS5Vl
+      A9Icfnfo8bJ2zrd2iAA0GPjzPK9FqOXFXrDe6fZ9uT48dXEOmgqaQhp0QTk5agq9
+      qhyRRSKBxMOrebYVaXAk3pDmMtJIIZ4VSeeRA6Qjy30SpbWLSyI1S2rf4C3tPIVz
+      Rj0iFBfXHMS7WVwJN+B9IavTcW4/kxt7VNCi+X+M+oIMy+7ebVDX9fio6TkxYG5p
+      bjyMXxMCamL1uPo/Kheu7HYgvp+DbTLNvW0O9E22gbXkGPE3ev/a3wlHpulQr6nS
+      Cf/x2qy0j+JRW+iKdnbCDKA6sqgEfZgGQFYK/Uq50G/R8yYvcFCSqYIa8j5HRcgI
+      RSLGJFECgYEA9eHOBVz/yXTcnppHReC4j0tD+gMLAAqNrgDy53jMzr/xy2LjNCY+
+      swIK7XQqdyxcXoJGp3K//shvC38dwlMB06PoRBoBhlC2eTUS1iXr08T/CfJfqDG6
+      izyyIK7Ho04h+qbns7GyYZghthR/tds4LJWGSZ96TX9A8nlS4XqWCQMCgYEA8Ls5
+      u+ZWHKrCBwIfPJkzuFbcoiPho/3n+XTIVtVsA7Eek0Ei2KFAkKwwzm4MnpPPG6Da
+      Aay2sc2ONs7BjuX975zEBDOSKAtMWAyEwxweYYyxHWkDZKl6dwDU5GeglsEgLpAm
+      gUBoW3CWmKJ5+xTDOGaLvj/uIhqnFQLpR++49usCgYEAsop4cuSIx9wXpwMX5eG7
+      ojFg9tXm0uzW3BbMStAox6gRB0KTAHcU6B7/mFTV0RthJy8p5sUoLPWVzJ9NGKH1
+      nZxTN8A6gzFwjqq/NsjqaSeOmcZpN1SExD4aiijfxfEiM0Om05CgmsVBFVnlMkQw
+      kg8xJ5ypzkQtAOSgDiJZd8kCgYAXgyHbcV7dw+vZhWKJp6j+izVXfMuwGb+LhNWA
+      ba30GluTJFyD7hQBTWAi+WqwHl2vJCHG4hih+yK1xbHwBBSuT5BxnJvc32Wgf/CD
+      of5xpq0x4yzaqxb0ApfIizqLHufGxHuOSj0nGTMMS2pAlMGQg6uIdHQMzq+dBMDG
+      LurQ6wKBgQDL9ecsIR5y8+lNyo7ScRojkwQZbTsHazCwVS44lWYY+fs/+kGyGB9c
+      FWC50XnPUbcpMwOZq9ibf/ZDHYo5NIxdbLkHG2Aw5ssPF2NFqRO8m+aST73fjoCL
+      eULAsTn0btoxcPLLh+lv2jYhBH+ygF0Aa7lUgK+raFTkngeTTN4TTw==
+      -----END RSA PRIVATE KEY-----
+
+  octavia:
+      manager:
+        certificates:
+          ca_certificate: '/etc/pki/ca/octavia_ca/ca.crt'
