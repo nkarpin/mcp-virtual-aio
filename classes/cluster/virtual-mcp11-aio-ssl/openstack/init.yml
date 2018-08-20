@@ -20,15 +20,13 @@ parameters:
     heat_service_protocol: ${_param:cluster_internal_protocol}
     cinder_service_protocol: ${_param:cluster_internal_protocol}
     designate_service_protocol: ${_param:cluster_internal_protocol}
-    apache_proxy_ssl:
+    apache_ssl:
       enabled: true
       engine: salt
       authority: "${_param:salt_minion_ca_authority}"
       key_file: "/etc/ssl/private/internal_proxy.key"
       cert_file: "/etc/ssl/certs/internal_proxy.crt"
       chain_file: "/etc/ssl/certs/internal_proxy-with-chain.crt"
-    apache_cinder_ssl: ${_param:apache_proxy_ssl}
-    apache_keystone_ssl: ${_param:apache_proxy_ssl}
     apache_proxy_openstack_api_address: ${_param:cluster_public_host}
     apache_proxy_openstack_keystone_host: 127.0.0.1
     apache_proxy_openstack_nova_host: 127.0.0.1
