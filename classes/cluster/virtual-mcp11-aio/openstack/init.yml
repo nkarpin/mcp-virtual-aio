@@ -130,6 +130,9 @@ parameters:
     runtest_tempest_public_net: public
     artifactory_user: artifactory_user
     artifactory_password: artifactory_password
+    openstack_log_appender: true
+    openstack_fluentd_handler_enabled: true
+    openstack_ossyslog_handler_enabled: true
   galera:
     master:
       members: ~
