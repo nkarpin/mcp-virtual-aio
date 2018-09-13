@@ -19,7 +19,7 @@ classes:
 - system.gnocchi.statsd.single
 - system.gnocchi.common.coordination.redis
 - service.redis.server.single
-- service.panko.server.single
+- system.panko.server.single
 - service.ceilometer.server.single.common
 - service.ceilometer.agent.single.common
 - system.ceilometer.server.backend.gnocchi
