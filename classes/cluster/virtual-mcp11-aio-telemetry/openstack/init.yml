@@ -91,6 +91,8 @@ parameters:
         port: ${_param:rabbitmq_port}
         ssl:
           enabled: ${_param:rabbitmq_ssl_enabled}
+      notification:
+        workers: 1
     agent:
       region: ${_param:openstack_region}
       polling:
