@@ -7,6 +7,7 @@ classes:
 - system.openssh.server.team.lab
 - system.salt.master.api
 - system.salt.master.pkg
+- system.salt.master.formula.pkg.openscap
 - system.salt.minion.ca.salt_master
 - system.salt.minion.cert.proxy
 - system.reclass.storage.salt
@@ -15,6 +16,7 @@ classes:
 - system.rabbitmq.server.single
 - cluster.virtual-mcp11-aio.openstack
 - system.auditd.server.ciscat
+- system.openscap.server
 - cluster.overrides
 parameters:
   _param:
