@@ -10,14 +10,10 @@ classes:
 - system.ironic.conductor.single
 - system.apache.server.site.ironic
 - service.ironic.client
-# TODO oshyshko https://mirantis.jira.com/browse/PROD-23444
-# Cause of deploy freezes on Executing command 'vbmc show cfg01-n0’.
-# Actual version virtualbmc 1.4.0
-# We will need test different BMCs versions.
-#- service.baremetal_simulator.simulator
-#- service.baremetal_simulator.nodes_flat
-#- service.baremetal_simulator.network.ovs
-#- system.salt.master.formula.pkg.baremetal
+- service.baremetal_simulator.simulator
+- service.baremetal_simulator.nodes_flat
+- service.baremetal_simulator.network.ovs
+- system.salt.master.formula.pkg.baremetal
 - system.neutron.gateway.ironic
 - system.nova.compute_ironic.single
 parameters:
