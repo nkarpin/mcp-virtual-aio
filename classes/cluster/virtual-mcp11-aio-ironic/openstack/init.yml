@@ -35,9 +35,9 @@ parameters:
     keystone_ironic_password: workshop
     ironic_service_host: ${_param:single_address}
     mysql_ironic_password: workshop
-    openstack_baremeta_neutron_subnet_cidr: 192.168.90.0/24
-    openstack_baremeta_neutron_subnet_allocation_start: 192.168.90.100
-    openstack_baremeta_neutron_subnet_allocation_end: 192.168.90.150
+    openstack_baremetal_neutron_subnet_cidr: 192.168.90.0/24
+    openstack_baremetal_neutron_subnet_allocation_start: 192.168.90.100
+    openstack_baremetal_neutron_subnet_allocation_end: 192.168.90.150
   ironic:
     api:
       bind:
