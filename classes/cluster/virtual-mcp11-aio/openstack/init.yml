@@ -1,4 +1,5 @@
 classes:
+- system.defaults
 - system.salt.minion.cert.mysql.server
 - system.salt.minion.cert.rabbitmq_server
 - system.linux.system.lowmem

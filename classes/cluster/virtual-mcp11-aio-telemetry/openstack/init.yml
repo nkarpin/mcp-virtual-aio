@@ -25,6 +25,7 @@ classes:
 - system.ceilometer.server.backend.gnocchi
 - system.gnocchi.client
 - system.gnocchi.client.v1.archive_policy.default
+- cluster.virtual-mcp11-aio.openstack
 parameters:
   _param:
     cluster_public_protocol: http
