@@ -43,7 +43,6 @@ classes:
 parameters:
   _param:
     openstack_version: queens
-    openscap_enabled: true
     openstack_node_role: primary
     cluster_public_host: ${_param:single_address}
     cluster_public_protocol: http
