@@ -38,6 +38,11 @@ parameters:
     openstack_baremetal_neutron_subnet_cidr: 192.168.90.0/24
     openstack_baremetal_neutron_subnet_allocation_start: 192.168.90.100
     openstack_baremetal_neutron_subnet_allocation_end: 192.168.90.150
+  baremetal_simulator:
+    deploy_ramdisk_file: tinyipa-stable-queens.gz
+    deploy_ramdisk_md5summ: f0629b7be803bd12a602bad6d6995510
+    deploy_kernel_file: tinyipa-stable-queens.vmlinuz
+    deploy_kernel_md5summ: 8bffc2d4ca84e7b6d1310fef7b8c6ddc
   ironic:
     api:
       bind:
