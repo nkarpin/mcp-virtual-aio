@@ -14,9 +14,9 @@ classes:
 - system.mysql.client
 - system.memcached.server.single
 - system.rabbitmq.server.single
-- cluster.virtual-mcp11-aio.openstack
 - system.auditd.server.ciscat
 - system.openscap.server
+- cluster.virtual-mcp11-aio.openstack
 - cluster.overrides
 parameters:
   _param:
