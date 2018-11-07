@@ -18,9 +18,13 @@ parameters:
     octavia_api_v1_enabled: true
     octavia_api_v2_enabled: true
     amp_flavor_id: 10
-    octavia_hm_bind_ip: 192.168.0.12
+    octavia_hm_bind_ip: 192.168.10.12
+    octavia_lb_mgmt_cidr: 192.168.10.0/24
+    octavia_lb_mgmt_allocation_pool_start: 192.168.10.2
+    octavia_lb_mgmt_allocation_pool_end: 192.168.10.200
     # there is reference binding_host_id: ${_param:openstack_gateway_node01_hostname} in
     # salt-models/reclass-system/neutron/client/service/octavia.yml
     openstack_gateway_node01_hostname: ${_param:infra_config_hostname}
     octavia_public_key: |
       ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDnN4SKRSb/0lYXUfjZ6+VfsxoGV0yx5lB30ErbsVOdbSihw9KEIB16jn6EhmYemId2DBMuTY3KcXTbE2KaH0USTVYgxtQPvzx5gG4G8itybYpGNnnTJEdPhAcmAIgzXi7aUmMXpopziUyEoNki86ArL8uv3r8IOD+j37yLNPWfV27CD3ejpVm27xTib31T8gNN6OQHSeV4G1W8Fw5wscvlycbsqhGDzaPxyXV4rVoObtF9FG87UBIfs2k1F4M5aikRMnH1FihjGMZTozwxc+9gQaacYsPrglUAkBGigzZxgsiGZN+xVLwhvjABHC56E8ufQIR02JBtLR1cKdz7iyfB root@cfg01
+
