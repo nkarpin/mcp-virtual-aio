@@ -22,7 +22,6 @@ parameters:
     cluster_internal_protocol: http
     cluster_public_protocol: http
     baremetal_interface: ens7
-    baremetal_gateway_ip: 192.168.90.1
     ironic_version: ${_param:openstack_version}
     ironic_service_protocol: ${_param:cluster_internal_protocol}
     ironic_api_type: 'public'
@@ -117,14 +116,6 @@ parameters:
   linux:
     network:
       interface:
-        baremetal_interface:
-          enabled: true
-          name: ${_param:baremetal_interface}
-          mtu: ${_param:interface_mtu}
-          proto: static
-          address: ${_param:baremetal_gateway_ip}
-          netmask: 255.255.255.0
-          type: eth
         br-baremetal:
           enabled: true
           type: ovs_bridge
