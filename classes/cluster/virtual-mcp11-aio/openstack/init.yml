@@ -42,7 +42,7 @@ classes:
 - service.runtest.tempest
 parameters:
   _param:
-    openstack_version: queens
+    openstack_version: rocky
     openstack_node_role: primary
     cluster_public_host: ${_param:single_address}
     cluster_public_protocol: http
