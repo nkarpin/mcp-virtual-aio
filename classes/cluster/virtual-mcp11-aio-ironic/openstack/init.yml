@@ -3,7 +3,6 @@ classes:
 - system.galera.server.database.ironic
 - system.keystone.client.service.ironic
 - system.nova.compute_ironic.single
-- system.neutron.gateway.ironic
 - system.neutron.client.service.ironic
 - system.ironic.api.single
 - system.ironic.tftpd_hpa
@@ -127,6 +126,15 @@ parameters:
           proto: static
           address: ${_param:cluster_baremetal_local_address}
           netmask: 255.255.255.0
+        ens_baremetal:
+          enabled: true
+          name: ${_param:baremetal_interface}
+          type: eth
+          proto: manual
+          ovs_bridge: br-baremetal
+          ovs_type: OVSPort
+          ipflush_onchange: true
+          restart_on_ipflush: true
     system:
       group:
         libvirtd:
@@ -134,9 +142,14 @@ parameters:
           name: libvirtd
   neutron:
     server:
+      dvr: False
       ironic_enabled: true
       backend:
         ironic_vlan_range: 100:1000
+    gateway:
+      agent_mode: legacy
+    compute:
+      agent_mode: legacy
   salt:
     master:
       environment:
