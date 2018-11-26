@@ -139,7 +139,6 @@ parameters:
     glance_image_fedora_location: 'https://artifactory.mcp.mirantis.net/artifactory/test-images/Fedora-Cloud-Base-27-1.6.x86_64.qcow2'
   galera:
     master:
-      members: ~
       innodb_buffer_pool_size: 1024M
       max_connections: 1000
     slave:
@@ -162,7 +161,6 @@ parameters:
       rpc_state_report_workers: 2
       rpc_workers: 2
       message_queue:
-        members: ~
         port: ${_param:rabbitmq_port}
         ssl:
           enabled: ${_param:rabbitmq_ssl_enabled}
@@ -185,8 +183,6 @@ parameters:
         user: neutron
         password: ${_param:keystone_neutron_password}
         tenant: service
-      cache:
-        members: ~
       message_queue:
         port: ${_param:rabbitmq_port}
         ssl:
@@ -216,8 +212,6 @@ parameters:
         ssl:
           enabled: ${_param:rabbitmq_ssl_enabled}
     volume:
-      cache:
-        members: ~
       database:
         ssl:
           enabled: ${_param:galera_ssl_enabled}
