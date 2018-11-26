@@ -24,6 +24,7 @@ parameters:
       create_share_from_snapshot_support : True
       mount_snapshot_support : True
       revert_to_snapshot_support : True
+    glance_image_manila_location: 'https://artifactory.mcp.mirantis.net/artifactory/test-images/manila-service-image-master.qcow2'
   manila:
     share:
       version: ${_param:openstack_version}
