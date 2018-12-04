@@ -47,7 +47,7 @@ parameters:
     openstack_node_role: primary
     cluster_public_host: ${_param:single_address}
     cluster_public_protocol: http
-    openstack_region: RegionOne
+    openstack_region: CustomRegion
     admin_email: root@localhost
     rabbitmq_openstack_password: workshop
     galera_server_cluster_name: openstack_cluster
@@ -253,6 +253,7 @@ parameters:
           enabled: ${_param:rabbitmq_ssl_enabled}
   keystone:
     server:
+      admin_region: ${_param:openstack_region}
       database:
         ssl:
           enabled: ${_param:galera_ssl_enabled}
