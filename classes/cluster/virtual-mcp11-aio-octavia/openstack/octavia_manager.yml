@@ -33,7 +33,3 @@ parameters:
       eULAsTn0btoxcPLLh+lv2jYhBH+ygF0Aa7lUgK+raFTkngeTTN4TTw==
       -----END RSA PRIVATE KEY-----
 
-  octavia:
-      manager:
-        certificates:
-          ca_certificate: '/etc/pki/ca/octavia_ca/ca.crt'
