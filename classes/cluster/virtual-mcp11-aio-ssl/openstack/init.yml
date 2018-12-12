@@ -64,7 +64,7 @@ parameters:
         protocol: https
   horizon:
     server:
-      secure: False
+      secure: True
       identity:
         encryption: ssl
   designate:
