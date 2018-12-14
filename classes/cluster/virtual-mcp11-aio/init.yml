@@ -2,7 +2,8 @@ classes:
 - system.linux.network.dynamic_hosts
 - service.git.client
 - system.linux.system.single.debian
-- system.linux.system.repo.mcp.salt
+- system.linux.system.repo.mcp.apt_mirantis.salt-formulas
+- system.linux.system.repo.mcp.apt_mirantis.update.salt-formulas
 - system.openssh.client.lab
 - system.openssh.server.team.lab
 - system.salt.master.api

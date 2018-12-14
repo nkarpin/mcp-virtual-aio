@@ -3,7 +3,7 @@ classes:
 parameters:
   _param:
     linux_system_codename: xenial
-    apt_mk_version: testing
+    mcp_version: testing
     linux_system_purge_repos: false
   linux:
     system:
