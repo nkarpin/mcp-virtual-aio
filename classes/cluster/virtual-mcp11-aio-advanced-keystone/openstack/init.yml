@@ -1,0 +1,26 @@
+classes:
+- cluster.virtual-mcp11-aio.openstack
+parameters:
+  keystone:
+    server:
+      domain:
+        example.com:
+          assignment:
+            backend: sql
+            driver: ldap
+          identity:
+            driver: ldap
+          backend: ldap
+          description: Testing domain
+          ldap:
+            auth: true
+            password: workshop
+            bind_user: cn=admin,dc=example,dc=com
+            suffix: dc=example,dc=com
+            url: ldap://localhost
+    client:
+      resources:
+        v3:
+          domains:
+            example.com:
+              description: Example domain

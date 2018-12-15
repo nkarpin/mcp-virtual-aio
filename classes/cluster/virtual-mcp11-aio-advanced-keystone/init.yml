@@ -1,0 +1,4 @@
+classes:
+- cluster.virtual-mcp11-aio-advanced-keystone.openstack
+- cluster.virtual-mcp11-aio
+- cluster.overrides
