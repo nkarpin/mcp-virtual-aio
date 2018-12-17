@@ -66,7 +66,6 @@ parameters:
         - pxe_ipmitool
       identity:
         engine: keystone
-        region: RegionOne
         host: ${_param:single_address}
         port: 35357
         user: ironic
