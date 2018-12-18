@@ -1,0 +1,31 @@
+classes:
+- system.linux.system.repo.mcp.apt_mirantis.docker
+- system.docker.host
+- system.docker.client
+- system.docker.swarm.master
+- system.docker.swarm.stack.ldap
+- cluster.virtual-mcp11-aio-advanced-keystone
+- cluster.virtual-mcp11-aio.infra.config
+parameters:
+  _param:
+    mcp_docker_registry: docker-prod-local.docker.mirantis.net
+    openldap_organisation: Example
+    openldap_dn: "dc=example,dc=com"
+    openldap_domain: example.com
+    openldap_admin_password: workshop
+    openldap_config_password: workshop
+    openldap_readonly_password: workshop
+  docker:
+    host:
+      insecure_registries:
+      - ${_param:mcp_docker_registry}
+      options:
+        bridge: none
+    client:
+      stack:
+        ldap:
+          service:
+            server:
+              ~ports:
+                - 389:389
+                - 636:636
