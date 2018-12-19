@@ -1,3 +1,5 @@
 classes:
 - cluster.virtual-mcp11-aio-octavia
 - cluster.virtual-mcp11-aio.infra.config
+- system.salt.minion.ca.octavia_amphora_ca
+- system.salt.minion.cert.octavia.amphora_cluster_client
