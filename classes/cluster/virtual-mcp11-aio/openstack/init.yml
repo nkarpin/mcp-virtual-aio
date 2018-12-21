@@ -40,7 +40,6 @@ classes:
 - system.bind.server.single
 - system.designate.server.single
 - system.designate.server.backend.bind
-- service.runtest.tempest
 parameters:
   _param:
     openstack_version: queens
