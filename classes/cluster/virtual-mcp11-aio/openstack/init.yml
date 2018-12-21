@@ -138,6 +138,7 @@ parameters:
     glance_image_cirros_location: 'https://artifactory.mcp.mirantis.net/artifactory/test-images/cirros-0.3.5-x86_64-disk.img'
     glance_image_fedora_location: 'https://artifactory.mcp.mirantis.net/artifactory/test-images/Fedora-Cloud-Base-27-1.6.x86_64.qcow2'
     openstack_control_address: ${_param:single_address}
+    glance_cors_allowed_origin: "http://${_param:single_address}:8078"
   galera:
     master:
       innodb_buffer_pool_size: 1024M
