@@ -31,14 +31,3 @@ parameters:
       FWC50XnPUbcpMwOZq9ibf/ZDHYo5NIxdbLkHG2Aw5ssPF2NFqRO8m+aST73fjoCL
       eULAsTn0btoxcPLLh+lv2jYhBH+ygF0Aa7lUgK+raFTkngeTTN4TTw==
       -----END RSA PRIVATE KEY-----
-  octavia:
-    # TODO remove these classes when https://gerrit.mcp.mirantis.com/#/c/32227/ got merged
-    manager:
-      certificates:
-        ca_private_key: /srv/salt/env/${_param:salt_master_base_environment}/_certs/octavia/ca.key
-        ca_certificate: /srv/salt/env/${_param:salt_master_base_environment}/_certs/octavia/ca_01.pem
-      haproxy_amphora:
-        client_cert: /srv/salt/env/${_param:salt_master_base_environment}/_certs/octavia/client.pem
-        client_cert_key: /srv/salt/env/${_param:salt_master_base_environment}/_certs/octavia/client.key
-        client_cert_all: /srv/salt/env/${_param:salt_master_base_environment}/_certs/octavia/client_all.pem
-        server_ca: /srv/salt/env/${_param:salt_master_base_environment}/_certs/octavia/ca_01.pem
