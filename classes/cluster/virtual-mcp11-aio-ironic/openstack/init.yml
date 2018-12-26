@@ -7,6 +7,7 @@ classes:
 - system.ironic.api.single
 - system.ironic.tftpd_hpa
 - system.ironic.conductor.single
+- system.ironic.conductor.storage.cinder
 - system.apache.server.site.ironic
 - service.ironic.client
 - service.baremetal_simulator.simulator
