@@ -4,7 +4,7 @@ classes:
 - system.glance.client.image.octavia
 - system.nova.client.service.octavia
 - system.neutron.control.openvswitch.octavia
-- system.neutron.client.service.octavia
+- system.neutron.client.service.octavia.single
 - system.octavia.api.single
 - system.octavia.client
 - cluster.virtual-mcp11-aio.openstack
@@ -18,7 +18,8 @@ parameters:
     octavia_api_v1_enabled: true
     octavia_api_v2_enabled: true
     amp_flavor_id: 10
-    octavia_hm_bind_ip: 192.168.100.12
+    octavia_health_manager_node01_address: 192.168.100.12
+    octavia_hm_bind_ip: ${_param:octavia_health_manager_node01_address}
     octavia_lb_mgmt_cidr: 192.168.100.0/24
     octavia_lb_mgmt_allocation_pool_start: 192.168.100.2
     octavia_lb_mgmt_allocation_pool_end: 192.168.100.200
