@@ -18,9 +18,9 @@ classes:
 - system.auditd.server.ciscat
 - system.openscap.server
 - cluster.virtual-mcp11-aio.openstack
-- cluster.overrides
 parameters:
   _param:
+    mcp_version: testing
     reclass_data_repository: https://gerrit.mcp.mirantis.net/salt-models/mcp-virtual-aio
     reclass_data_revision: master
     salt_master_environment_repository: "https://github.com/tcpcloud"

@@ -1,9 +1,9 @@
 classes:
   - cluster.virtual-mcp11-aio
+  - cluster.overrides
 parameters:
   _param:
     linux_system_codename: xenial
-    mcp_version: testing
     linux_system_purge_repos: false
   linux:
     system:
