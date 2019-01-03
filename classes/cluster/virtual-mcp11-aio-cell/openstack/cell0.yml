@@ -1,0 +1,210 @@
+classes:
+- service.neutron.gateway.single
+- system.cinder.control.single
+- system.cinder.control.backend.lvm
+- service.cinder.volume.single
+- system.cinder.volume.backend.lvm
+- system.horizon.server.single
+- system.horizon.server.plugin.heat
+- system.bind.server.single
+- system.designate.server.single
+- system.designate.server.backend.bind
+- system.glance.control.single
+- system.nova.control.single
+- system.heat.server.single
+- system.keystone.client.single
+- system.keystone.client.service.cinder3
+- system.keystone.client.service.nova21
+- system.keystone.client.service.nova-placement
+- system.keystone.client.service.designate
+- system.neutron.client.service.public
+- system.neutron.control.openvswitch.single
+- system.galera.server.database.cinder
+- system.galera.server.database.designate
+- system.galera.server.database.glance
+- system.galera.server.database.heat
+- system.galera.server.database.keystone
+- system.galera.server.database.nova
+- system.galera.server.database.neutron
+- system.keystone.server.wsgi
+- system.keystone.server.single
+- system.linux.storage.loopback
+- cluster.virtual-mcp11-aio-cell.openstack
+parameters:
+  neutron:
+    server:
+      dvr: False
+      # Temporary install neutron-plugin-ml2 untill https://gerrit.mcp.mirantis.net/#/c/16262/ promoted
+      # to stable
+      pkgs:
+        - neutron-server
+        - python-neutron-lbaas
+        - gettext-base
+        - python-pycadf
+        - neutron-plugin-ml2
+      api_workers: 2
+      rpc_state_report_workers: 2
+      rpc_workers: 2
+      message_queue:
+        port: ${_param:rabbitmq_port}
+        ssl:
+          enabled: ${_param:rabbitmq_ssl_enabled}
+      database:
+        ssl:
+          enabled: ${_param:galera_ssl_enabled}
+    gateway:
+      metadata:
+        workers: 2
+      agent_mode: legacy
+      dvr: False
+      message_queue:
+        port: ${_param:rabbitmq_port}
+        ssl:
+          enabled: ${_param:rabbitmq_ssl_enabled}
+        ~members:
+          - host: ${_param:single_address}
+    compute:
+      agent_mode: legacy
+  nova:
+    api:
+      enabled: true
+      version: ${_param:openstack_version}
+    consoleproxy:
+      enabled: true
+      version: ${_param:openstack_version}
+    consoleauth:
+      enabled: true
+      version: ${_param:openstack_version}
+    scheduler:
+      enabled: true
+      version: ${_param:openstack_version}
+    conductor:
+      enabled: true
+      version: ${_param:openstack_version}
+    placement:
+      enabled: true
+      version: ${_param:openstack_version}
+    cells:
+      cell2:
+        name: 'nova_cell2'
+        message_queue:
+          user: openstack
+          password: ${_param:rabbitmq_openstack_password}
+          virtual_host: /openstack
+          members:
+            - host: ${_param:cell2_control_address}
+              port: 5672
+        database:
+          engine: 'mysql'
+          host: ${_param:cell2_control_address}
+          name: 'nova_cell2_db'
+          user: nova
+          password: ${_param:mysql_nova_password}
+    controller:
+      vncproxy_url: http://${_param:single_address}:6080
+      database:
+        ssl:
+          enabled: ${_param:galera_ssl_enabled}
+      message_queue:
+        port: ${_param:rabbitmq_port}
+        ssl:
+          enabled: ${_param:rabbitmq_ssl_enabled}
+  cinder:
+    controller:
+      database:
+        ssl:
+          enabled: ${_param:galera_ssl_enabled}
+      message_queue:
+        port: ${_param:rabbitmq_port}
+        ssl:
+          enabled: ${_param:rabbitmq_ssl_enabled}
+    volume:
+      database:
+        ssl:
+          enabled: ${_param:galera_ssl_enabled}
+      cache:
+        ~members:
+        - host: ${_param:single_address}
+          port: 11211
+      message_queue:
+        port: ${_param:rabbitmq_port}
+        ssl:
+          enabled: ${_param:rabbitmq_ssl_enabled}
+  horizon:
+    server:
+      secure: False
+      identity:
+        encryption: ${_param:horizon_identity_encryption}
+      api_versions:
+        identity: 3
+  designate:
+    server:
+      quota:
+        zones: ${_param:designate_quota_zones}
+      database:
+        ssl:
+          enabled: ${_param:galera_ssl_enabled}
+      message_queue:
+        port: ${_param:rabbitmq_port}
+        ssl:
+          enabled: ${_param:rabbitmq_ssl_enabled}
+    worker:
+      enabled: ${_param:designate_worker_enabled}
+  glance:
+    client:
+      enabled: True
+    server:
+      database:
+        ssl:
+          enabled: ${_param:galera_ssl_enabled}
+      message_queue:
+        port: ${_param:rabbitmq_port}
+        ssl:
+          enabled: ${_param:rabbitmq_ssl_enabled}
+  keystone:
+    server:
+      admin_region: ${_param:openstack_region}
+      database:
+        ssl:
+          enabled: ${_param:galera_ssl_enabled}
+      message_queue:
+        port: ${_param:rabbitmq_port}
+        ssl:
+          enabled: ${_param:rabbitmq_ssl_enabled}
+    client:
+      enabled: true
+      resources:
+        v3:
+          enabled: true
+      server:
+        identity:
+          admin:
+            api_version: 3
+        admin_identity:
+          admin:
+            api_version: ''
+            user_domain_name: 'Default'
+            project_domain_name: 'Default'
+  heat:
+    server:
+      database:
+        ssl:
+          enabled: ${_param:galera_ssl_enabled}
+      message_queue:
+        port: ${_param:rabbitmq_port}
+        ssl:
+          enabled: ${_param:rabbitmq_ssl_enabled}
+  linux:
+    network:
+      bridge: openvswitch
+      interface:
+        br-floating:
+          enabled: true
+          type: ovs_bridge
+        phy-public:
+          enabled: true
+          type: ovs_port
+          bridge: br-floating
+          proto: static
+          address: ${_param:openstack_public_neutron_subnet_gateway}
+          netmask: 255.255.255.0

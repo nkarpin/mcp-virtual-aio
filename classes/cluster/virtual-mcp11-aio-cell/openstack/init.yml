@@ -1,0 +1,156 @@
+classes:
+- system.defaults
+- system.salt.minion.cert.mysql.server
+- system.salt.minion.cert.rabbitmq_server
+- system.linux.system.lowmem
+- system.linux.system.repo.mcp.mirror.v1.openstack
+- system.linux.system.repo.mcp.extra
+- service.rabbitmq.server.ssl
+- system.rabbitmq.server.vhost.openstack
+- service.galera.ssl
+- service.galera.master.cluster
+- system.nova.compute.single
+parameters:
+  _param:
+    openstack_version: queens
+    openstack_node_role: primary
+    cluster_public_host: ${_param:single_address}
+    cluster_public_protocol: http
+    openstack_region: CustomRegion
+    admin_email: root@localhost
+    rabbitmq_openstack_password: workshop
+    galera_server_cluster_name: openstack_cluster
+    galera_server_maintenance_password: workshop
+    galera_server_admin_password: workshop
+    keystone_public_path: '/'
+    keystone_internal_path: '/'
+    keystone_admin_path: '/'
+    keystone_version: ${_param:openstack_version}
+    glance_version: ${_param:openstack_version}
+    nova_version: ${_param:openstack_version}
+    neutron_version: ${_param:openstack_version}
+    cinder_version: ${_param:openstack_version}
+    heat_version: ${_param:openstack_version}
+    horizon_version: ${_param:openstack_version}
+    designate_version: ${_param:openstack_version}
+    keystone_service_token: workshop
+    keystone_admin_password: workshop
+    keystone_ceilometer_password: workshop
+    keystone_cinder_password: workshop
+    keystone_glance_password: workshop
+    keystone_heat_password: workshop
+    keystone_neutron_password: workshop
+    keystone_nova_password: workshop
+    keystone_designate_password: workshop
+    keystone_service_host: ${_param:cell0_control_address}
+    mysql_keystone_password: workshop
+    mysql_glance_password: workshop
+    mysql_nova_password: workshop
+    mysql_neutron_password: workshop
+    mysql_cinder_password: workshop
+    mysql_heat_password: workshop
+    mysql_designate_password: workshop
+    heat_service_host: ${_param:cell0_control_address}
+    neutron_service_host: ${_param:cell0_control_address}
+    glance_service_host: ${_param:cell0_control_address}
+    cinder_service_host: ${_param:cell0_control_address}
+    designate_service_host: ${_param:cell0_control_address}
+    nova_service_host: ${_param:single_address}
+    control_address: ${_param:single_address}
+    metadata_password: workshop
+    cluster_vip_address: ${_param:single_address}
+    cluster_local_address: ${_param:single_address}
+    openstack_database_address: ${_param:single_address}
+    tenant_address: ${_param:single_address}
+    heat_domain_admin_password: workshop
+    horizon_secret_key: workshop
+    horizon_identity_encryption: none
+    horizon_identity_version: 2
+    horizon_identity_host: ${_param:cell0_control_address}
+    designate_admin_api_enabled: true
+    designate_bind9_rndc_key: 4pc+X4PDqb2q+5o72dISm72LM1Ds9X2EYZjqg+nmsS7FhdTwzFFY8l/iEDmHxnyjkA33EQC8H+z0fLLBunoitw==
+    designate_pool_target_type: bind9
+    designate_domain_id: 5186883b-91fb-4891-bd49-e6769234a8fc
+    designate_pool_ns_records:
+      - hostname: 'ns1.example.org.'
+        priority: 10
+    designate_pool_nameservers:
+      - host: ${_param:single_address}
+        port: 53
+    designate_pool_target_masters:
+      - host: ${_param:single_address}
+        port: 5354
+    designate_pool_target_options:
+      host: ${_param:single_address}
+      port: 53
+      rndc_host: 127.0.0.1
+      rndc_port: 953
+      rndc_key_file: /etc/designate/rndc.key
+    designate_quota_zones: 40
+    designate_worker_enabled: true
+    openstack_public_neutron_subnet_gateway:  192.168.130.1
+    openstack_public_neutron_subnet_cidr: 192.168.130.0/24
+    openstack_public_neutron_subnet_allocation_start: 192.168.130.10
+    openstack_public_neutron_subnet_allocation_end: 192.168.130.254
+    galera_ssl_enabled: true
+    rabbitmq_ssl_enabled: false # untill rabbitmq formula with https://gerrit.mcp.mirantis.net/#/c/15198/ promoted to stable
+    rabbitmq_port: 5672 # for non-ssl use 5672/for ssl 5671
+    runtest_tempest_cfg_dir: /root/rally_reports/
+    runtest_tempest_cfg_name: tempest_generated.conf
+    runtest_tempest_log_file: /home/rally/rally_reports/tempest.log
+    runtest_tempest_public_net: public
+    artifactory_user: artifactory_user
+    artifactory_password: artifactory_password
+    openstack_log_appender: true
+    openstack_fluentd_handler_enabled: true
+    openstack_ossyslog_handler_enabled: true
+    glance_image_cirros_location: 'https://artifactory.mcp.mirantis.net/artifactory/test-images/cirros-0.3.5-x86_64-disk.img'
+    glance_image_fedora_location: 'https://artifactory.mcp.mirantis.net/artifactory/test-images/Fedora-Cloud-Base-27-1.6.x86_64.qcow2'
+    openstack_control_address: ${_param:single_address}
+    glance_cors_allowed_origin: "http://${_param:single_address}:8078"
+  salt:
+    minion:
+      trusted_ca_minions:
+        - ${_param:infra_config_hostname}.${_param:cluster_domain}
+  galera:
+    master:
+      innodb_buffer_pool_size: 1024M
+      max_connections: 1000
+    slave:
+      enabled: false
+  rabbitmq:
+    server:
+      ssl:
+        enabled: ${_param:rabbitmq_ssl_enabled}
+  nova:
+    compute:
+      vncproxy_url: http://${_param:single_address}:6080
+      network:
+        user: neutron
+        password: ${_param:keystone_neutron_password}
+        tenant: service
+      message_queue:
+        port: ${_param:rabbitmq_port}
+        ssl:
+          enabled: ${_param:rabbitmq_ssl_enabled}
+      # Since in AIO by default option config_drive is false,
+      # due to nova controller and compute states rewrite
+      # configs each, we must set config_drive option
+      # explicitly for runtest formula to discover the correct settings
+      config_drive:
+        forced: false
+    common:
+      vncproxy_url: http://${_param:single_address}:6080
+      database:
+        ssl:
+          enabled: ${_param:galera_ssl_enabled}
+      message_queue:
+        port: ${_param:rabbitmq_port}
+        ssl:
+          enabled: ${_param:rabbitmq_ssl_enabled}
+  # Until dependency with minimal version to python-tenacity is added.
+  linux:
+    system:
+      package:
+        python-tornado:
+          version: latest

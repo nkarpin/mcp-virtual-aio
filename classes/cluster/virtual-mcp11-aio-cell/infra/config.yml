@@ -1,0 +1,76 @@
+classes:
+  - system.salt.master.api
+  - system.salt.master.pkg
+  - system.salt.master.formula.pkg.openscap
+  - system.salt.minion.ca.salt_master
+  - system.salt.minion.cert.proxy
+  - system.reclass.storage.salt
+  - system.linux.system.repo.mcp.apt_mirantis.salt-formulas
+  - system.linux.system.repo.mcp.apt_mirantis.update.salt-formulas
+  - cluster.virtual-mcp11-aio-cell.openstack.cell0
+  - cluster.virtual-mcp11-aio-cell
+  - cluster.overrides
+parameters:
+  _param:
+    linux_system_codename: xenial
+    linux_system_purge_repos: false
+  linux:
+    system:
+      name: cfg01
+      domain: ${_param:cluster_domain}
+      purge_repos: ${_param:linux_system_purge_repos}
+  salt:
+    api:
+      pkgs:
+       - salt-api
+       - python-cherrypy3
+    master:
+      worker_threads: 5
+      environment:
+        prd:
+          formula:
+            # Until patch to reclass-system is merged https://gerrit.mcp.mirantis.net/#/c/20665/
+            # and reclass bumped.
+            oslo_templates:
+              source: pkg
+              name: salt-formula-oslo-templates
+      reactor:
+        reclass/minion/classify:
+        - salt://reclass/reactor/node_register.sls
+  reclass:
+    storage:
+      class_mapping:
+        common_node:
+          expression: all
+          node_param:
+            single_address:
+              value_template: <<node_control_ip>>
+            linux_system_codename:
+              value_template: <<node_os>>
+            salt_master_host:
+              value_template: <<node_master_ip>>
+        infra_config:
+          expression: <<node_hostname>>__startswith__cfg
+          cluster_param:
+            infra_config_address:
+              value_template: <<node_control_ip>>
+            infra_config_deploy_address:
+              value_template: <<node_deploy_ip>>
+            cluster_domain:
+              value_template: <<node_domain>>
+# TODO: Enable tenant coonection over tenant network
+#            tenant_address:
+#              value_template: <<node_tenant_ip>>
+        openstack_compute:
+          expression: <<node_hostname>>__startswith__cmp
+          node_class:
+            value_template:
+            - cluster.virtual-mcp11-aio-cell.openstack.cell2
+            - cluster.virtual-mcp11-aio-cell
+            - cluster.overrides
+          node_param:
+# TODO: Enable tenant coonection over tenant network
+#            tenant_address:
+#              value_template: <<node_tenant_ip>>
+            external_address:
+              value_template: <<node_external_ip>>

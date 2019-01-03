@@ -1,0 +1,129 @@
+classes:
+# Uncomment when it is present in reclass system
+#- system.nova.common.single
+- system.salt.minion.cert.mysql.clients.openstack.nova
+- system.salt.minion.cert.rabbitmq.clients.openstack.nova
+- service.nova.common.single
+- system.nova.upgrade
+- cluster.virtual-mcp11-aio-cell.openstack
+# TODO: make system compute single for neutron
+- service.neutron.compute.single
+- system.neutron.upgrade
+- system.salt.minion.cert.rabbitmq.clients.openstack.neutron
+parameters:
+  _param:
+    neutron_enable_qos: False
+    neutron_enable_vlan_aware_vms: False
+    neutron_enable_bgp_vpn: False
+    neutron_bgp_vpn_driver: bagpipe
+    mysql_nova_ssl_option: []
+    openstack_log_appender: true
+    openstack_fluentd_handler_enabled: true
+    openstack_ossyslog_handler_enabled: true
+# should be moved to common single
+  linux:
+    system:
+      package:
+        python-pymysql:
+          fromrepo: ${_param:openstack_version}
+          version: latest
+  nova:
+    common:
+      role: primary
+      identity:
+        host: ${_param:keystone_service_host}
+        protocol: ${_param:cluster_internal_protocol}
+        region: ${_param:openstack_region}
+      glance:
+        host: ${_param:glance_service_host}
+        protocol: ${_param:cluster_internal_protocol}
+      network:
+        host: ${_param:neutron_service_host}
+        password: workshop
+        user: nova
+        tenant: service
+        protocol: ${_param:cluster_internal_protocol}
+        region: ${_param:openstack_region}
+      vncproxy_url: 'http://${_param:cell0_control_address}:6080'
+      database:
+        name: nova_cell2_db
+        host: ${_param:single_address}
+        x509:
+          enabled: ${_param:openstack_mysql_x509_enabled}
+          ca_file: ${_param:mysql_nova_ssl_ca_file}
+          key_file: ${_param:mysql_nova_client_ssl_key_file}
+          cert_file: ${_param:mysql_nova_client_ssl_cert_file}
+        ssl:
+          enabled: ${_param:galera_ssl_enabled}
+      barbican:
+        enabled: ${_param:barbican_integration_enabled}
+      message_queue:
+        port: ${_param:openstack_rabbitmq_port}
+        x509:
+          enabled: ${_param:openstack_rabbitmq_x509_enabled}
+          ca_file: ${_param:rabbitmq_nova_ssl_ca_file}
+          key_file: ${_param:rabbitmq_nova_client_ssl_key_file}
+          cert_file: ${_param:rabbitmq_nova_client_ssl_cert_file}
+        ssl:
+          enabled: ${_param:rabbitmq_ssl_enabled}
+      cache:
+        security:
+          enabled: ${_param:nova_memcache_security_enabled}
+          strategy: ${_param:openstack_memcache_security_strategy}
+          secret_key: ${_param:nova_memcache_secret_key}
+    api:
+      enabled: false
+      version: ${_param:openstack_version}
+    conductor:
+      enabled: true
+      version: ${_param:openstack_version}
+    compute:
+      identity:
+        host: ${_param:keystone_service_host}
+      image:
+        host: ${_param:glance_service_host}
+      network:
+        host: ${_param:neutron_service_host}
+      vncproxy_url: 'http://${_param:cell0_control_address}:6080'
+  mysql:
+    server:
+      database:
+        nova_cell2_db:
+          encoding: utf8
+          users:
+          - name: nova
+            password: ${_param:mysql_nova_password}
+            host: '%'
+            rights: all
+            ssl_option: ${_param:mysql_nova_ssl_option}
+          - name: nova
+            password: ${_param:mysql_nova_password}
+            host: ${_param:cluster_local_address}
+            rights: all
+            ssl_option: ${_param:mysql_nova_ssl_option}
+  neutron:
+    compute:
+      dvr: false
+      qos: ${_param:neutron_enable_qos}
+      vlan_aware_vms: ${_param:neutron_enable_vlan_aware_vms}
+      bgp_vpn:
+        enabled: ${_param:neutron_enable_bgp_vpn}
+        driver: ${_param:neutron_bgp_vpn_driver}
+      agent_mode: legacy
+      external_access: true
+      backend:
+        tenant_network_types: "flat,vxlan"
+      message_queue:
+        port: 5672
+        members:
+          - host: ${_param:cell0_control_address}
+        x509:
+          ca_file: /etc/neutron/ssl/rabbitmq/ca-cert.pem
+          cert_file: /etc/neutron/ssl/rabbitmq/client-cert.pem
+          enabled: False
+          key_file: /etc/neutron/ssl/rabbitmq/client-key.pem
+        ssl:
+          enabled: ${_param:rabbitmq_ssl_enabled}
+      metadata:
+        host: ${_param:cell0_control_address}
+
